@@ -32,7 +32,7 @@
                 <div class="inline-flex p-3 bg-amber-500/10 rounded-2xl border border-amber-500/20 text-amber-400 mb-2">
                     <i class="fa-solid fa-car-rear text-3xl"></i>
                 </div>
-                <h1 class="text-2xl font-extrabold tracking-tight text-white"> AUTO</h1>
+                <h1 class="text-2xl font-extrabold tracking-tight text-white">LINH QUÂN AUTO</h1>
                 <p class="text-xs text-slate-400 font-medium">Hệ Thống Quản Lý Kho & Doanh Thu Chuyên Nghiệp</p>
             </div>
 
@@ -45,7 +45,6 @@
                     <label class="block text-xs font-semibold text-slate-300 mb-1.5">Mật Khẩu</label>
                     <input type="password" id="login-password" required autocomplete="current-password" placeholder="••••••••" class="w-full bg-slate-950/80 border border-slate-700/70 rounded-xl p-3 text-sm text-slate-100 focus:border-amber-500 outline-none transition">
                 </div>
-                <!-- YÊU CẦU 1: PHẦN LOGIN CÓ NHỚ TÀI KHOẢN (REMEMBER ME) -->
                 <div class="flex items-center justify-between text-xs text-slate-300">
                     <label class="flex items-center gap-2 cursor-pointer">
                         <input type="checkbox" id="remember-me" class="rounded bg-slate-950 border-slate-700 text-amber-500 focus:ring-0">
@@ -190,7 +189,6 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80">
                         <div>
                             <label class="block text-[11px] font-bold text-slate-400 mb-1">Ngày Bán</label>
-                            <!-- YÊU CẦU 2: TỰ ĐỘNG THỜI GIAN THỰC -->
                             <input type="date" id="sell-date" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-100 font-semibold outline-none">
                         </div>
                         <div>
@@ -313,7 +311,6 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-[11px] font-bold text-slate-400 mb-1">Ngày Nhập Kho</label>
-                                <!-- YÊU CẦU 2: TỰ ĐỘNG THỜI GIAN THỰC -->
                                 <input type="date" id="import-date" required class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 font-semibold outline-none">
                             </div>
                             <div>
@@ -691,7 +688,6 @@
         let isCustomItemMode = false;
 
         document.addEventListener('DOMContentLoaded', async () => {
-            // Tải thông tin Remember Me nếu có
             const rememberedUser = localStorage.getItem('auto_remembered_user');
             if (rememberedUser) {
                 document.getElementById('login-username').value = rememberedUser;
@@ -699,13 +695,13 @@
             }
 
             checkAuth();
-            setDefaultDates(); // YÊU CẦU 2: GÁN NGÀY GIỜ THỜI GIAN THỰC
+            setDefaultDates(); 
             await fetchCloudData();
         });
 
-        // YÊU CẦU 2: TỰ ĐỘNG GÁN THỜI GIAN THỰC KHI LOAD TRANG
+        // Tự động gán ngày giờ theo thời gian thực (đảm bảo không bị kẹt ngày cũ)
         function setDefaultDates() {
-            const today = new Date().toISOString().split('T')[0];
+            const today = new Date().toLocaleDateString('en-CA'); // Lấy chuẩn YYYY-MM-DD theo giờ thực tế
             const sellDateEl = document.getElementById('sell-date');
             const importDateEl = document.getElementById('import-date');
             if(sellDateEl) sellDateEl.value = today;
@@ -782,7 +778,6 @@
                 currentUser = { username: u, role: systemUsers[u].role, name: systemUsers[u].name };
                 localStorage.setItem('auto_logged_user', JSON.stringify(currentUser));
 
-                // YÊU CẦU 1: XỬ LÝ NHỚ TÀI KHOẢN (REMEMBER ME)
                 if (rememberCheckbox && rememberCheckbox.checked) {
                     localStorage.setItem('auto_remembered_user', u);
                 } else {
@@ -872,7 +867,7 @@
             if (tabId === 'history') renderHistory();
             if (tabId === 'users') renderUsers();
             if (tabId === 'sell' || tabId === 'import') {
-                setDefaultDates(); // Cập nhật thời gian thực khi vào trang bán hàng/nhập kho
+                setDefaultDates(); // Cập nhật ngày theo thời gian thực mỗi khi mở mục Bán/Nhập
                 populateAllSelects();
             }
         }
@@ -977,7 +972,7 @@
             let filteredSales = salesHistory;
 
             if (filter === 'today') {
-                const todayStr = now.toISOString().split('T')[0];
+                const todayStr = now.toLocaleDateString('en-CA');
                 filteredSales = filteredSales.filter(s => s.date && s.date.startsWith(todayStr));
             } else if (filter === '7days') {
                 const sevenDaysAgo = new Date(); sevenDaysAgo.setDate(now.getDate() - 7);
@@ -1028,7 +1023,7 @@
             
             for (let i = 6; i >= 0; i--) {
                 const d = new Date(); d.setDate(d.getDate() - i);
-                const dateStr = d.toISOString().split('T')[0];
+                const dateStr = d.toLocaleDateString('en-CA');
                 days.push(`${d.getDate()}/${d.getMonth()+1}`);
 
                 const dayRevenue = salesHistory
@@ -1227,7 +1222,7 @@
             document.getElementById('sell-phone').value = '';
             document.getElementById('sell-note').value = '';
             renderCartTable();
-            setDefaultDates(); // Reset lại ngày về thời gian thực cho đơn tiếp theo
+            setDefaultDates(); 
             populateAllSelects();
         }
 
@@ -1258,13 +1253,13 @@
             document.getElementById('bill-modal').classList.remove('hidden');
         }
 
-        // YÊU CẦU 3: SAU KHI XÁC NHẬN SẼ TỰ ĐỘNG QUAY LẠI MÀN HÌNH TỔNG QUAN
+        // Tự động quay lại màn hình Tổng quan sau khi đóng hóa đơn
         function closeBillModal() {
             document.getElementById('bill-modal').classList.add('hidden');
             if (currentUser.role === 'staff') {
                 switchTab('inventory');
             } else {
-                switchTab('dashboard'); // Tự động quay về Tổng quan
+                switchTab('dashboard'); 
             }
         }
 
@@ -1323,7 +1318,7 @@
             alert('Nhập kho thành công!');
             document.getElementById('import-supplier').value = '';
             document.getElementById('import-note').value = '';
-            setDefaultDates(); // Reset ngày về thực tế
+            setDefaultDates(); 
             populateAllSelects();
             switchTab('inventory');
         }
