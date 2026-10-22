@@ -16,7 +16,7 @@
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
 
-    <!-- FORM ĐĂNG NHẬP (Hiển thị khi chưa login) -->
+    <!-- FORM ĐĂNG NHẬP -->
     <div id="login-modal" class="fixed inset-0 bg-slate-950 flex items-center justify-center p-4 z-50">
         <div class="bg-slate-800 border border-slate-700 p-8 rounded-2xl w-full max-w-md shadow-2xl space-y-6">
             <div class="text-center space-y-2">
@@ -28,7 +28,7 @@
             <form onsubmit="handleLogin(event)" class="space-y-4">
                 <div>
                     <label class="block text-xs font-medium text-slate-300 mb-1">Tên Đăng Nhập</label>
-                    <input type="text" id="login-username" required placeholder="Nhập admin hoặc nhanvien" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-sm text-slate-200 focus:border-amber-500 outline-none">
+                    <input type="text" id="login-username" required placeholder="Nhập tài khoản..." class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-sm text-slate-200 focus:border-amber-500 outline-none">
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-slate-300 mb-1">Mật Khẩu</label>
@@ -39,15 +39,13 @@
                 </button>
             </form>
             <div class="text-xs text-slate-500 text-center border-t border-slate-700 pt-3">
-                <p>Tài khoản Quản lý: <b class="text-amber-400">admin</b> / Mật khẩu: <b class="text-amber-400">123456</b></p>
-                <p>Tài khoản Nhân viên: <b class="text-blue-400">nhanvien</b> / Mật khẩu: <b class="text-blue-400">123456</b></p>
+                <p>Tài khoản Quản lý mặc định: <b class="text-amber-400">admin</b> / Mật khẩu: <b class="text-amber-400">123456</b></p>
             </div>
         </div>
     </div>
 
     <!-- MAIN APP INTERFACE -->
     <div id="main-app" class="hidden flex-col min-h-screen">
-        <!-- Header Navigation -->
         <header class="bg-slate-800 border-b border-slate-700 sticky top-0 z-40">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center justify-between h-16">
@@ -72,6 +70,9 @@
                         <button onclick="switchTab('history')" id="nav-history" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-700">
                             <i class="fa-solid fa-clock-rotate-left mr-1.5"></i>Lịch Sử
                         </button>
+                        <button onclick="switchTab('users')" id="nav-users" class="role-admin nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-700">
+                            <i class="fa-solid fa-users-gear mr-1.5 text-emerald-400"></i>Nhân Sự
+                        </button>
                         <button onclick="switchTab('settings')" id="nav-settings" class="role-admin nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-700">
                             <i class="fa-solid fa-gear mr-1.5"></i>Cài Đặt
                         </button>
@@ -94,26 +95,27 @@
                 <button onclick="switchTab('import')" class="role-admin px-3 py-1.5 rounded text-xs whitespace-nowrap bg-blue-500/20 text-blue-300 font-bold">Nhập Kho</button>
                 <button onclick="switchTab('inventory')" class="px-3 py-1.5 rounded text-xs whitespace-nowrap bg-slate-700 text-slate-200">Kho</button>
                 <button onclick="switchTab('history')" class="px-3 py-1.5 rounded text-xs whitespace-nowrap bg-slate-700 text-slate-200">Lịch Sử</button>
+                <button onclick="switchTab('users')" class="role-admin px-3 py-1.5 rounded text-xs whitespace-nowrap bg-emerald-500/20 text-emerald-300 font-bold">Nhân Sự</button>
                 <button onclick="switchTab('settings')" class="role-admin px-3 py-1.5 rounded text-xs whitespace-nowrap bg-slate-700 text-slate-200">Cài Đặt</button>
             </div>
         </header>
 
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
 
-            <!-- TAB 1: DASHBOARD & REVENUE -->
+            <!-- TAB 1: DASHBOARD -->
             <section id="tab-dashboard" class="role-admin space-y-6">
                 <div class="flex flex-wrap items-center justify-between gap-4 bg-slate-800 p-4 rounded-xl border border-slate-700">
                     <h2 class="text-lg font-bold text-white flex items-center gap-2">
                         <i class="fa-solid fa-chart-pie text-amber-500"></i> Báo Cáo Doanh Thu & Kho
                     </h2>
                     <div class="flex items-center gap-3">
-                        <select id="revenue-filter" onchange="renderDashboard()" class="bg-slate-900 border border-slate-600 text-slate-200 text-sm rounded-lg p-2 focus:ring-amber-500">
+                        <select id="revenue-filter" onchange="renderDashboard()" class="bg-slate-900 border border-slate-600 text-slate-200 text-sm rounded-lg p-2">
                             <option value="today">Hôm nay</option>
                             <option value="7days" selected>7 ngày qua</option>
                             <option value="month">Tháng này</option>
                             <option value="all">Tất cả thời gian</option>
                         </select>
-                        <button onclick="syncWithGoogleSheet()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-2 rounded-lg font-medium flex items-center gap-1 transition">
+                        <button onclick="syncWithGoogleSheet()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-2 rounded-lg font-medium flex items-center gap-1">
                             <i class="fa-solid fa-rotate"></i> Đồng bộ ngay
                         </button>
                     </div>
@@ -174,15 +176,13 @@
                     </div>
 
                     <div class="bg-slate-800 p-5 rounded-xl border border-slate-700 flex flex-col">
-                        <h3 class="text-md font-bold text-white mb-3 flex items-center justify-between">
-                            <span><i class="fa-solid fa-triangle-exclamation text-rose-500 mr-2"></i>Sản Phẩm Cần Nhập</span>
-                        </h3>
+                        <h3 class="text-md font-bold text-white mb-3"><span><i class="fa-solid fa-triangle-exclamation text-rose-500 mr-2"></i>Sản Phẩm Cần Nhập</span></h3>
                         <div id="low-stock-list" class="space-y-2 overflow-y-auto max-h-60 flex-grow pr-1"></div>
                     </div>
                 </div>
             </section>
 
-            <!-- TAB 2: BÁN HÀNG & LẮP ĐẶT -->
+            <!-- TAB 2: BÁN HÀNG -->
             <section id="tab-sell" class="hidden max-w-3xl mx-auto space-y-6">
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-5">
                     <div class="flex items-center justify-between border-b border-slate-700 pb-3">
@@ -246,7 +246,7 @@
                 </div>
             </section>
 
-            <!-- TAB 3: NHẬP KHO HÀNG HÓA -->
+            <!-- TAB 3: NHẬP KHO -->
             <section id="tab-import" class="role-admin hidden max-w-3xl mx-auto space-y-6">
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-5">
                     <div class="flex items-center justify-between border-b border-slate-700 pb-3">
@@ -301,7 +301,7 @@
                 </div>
             </section>
 
-            <!-- TAB 4: INVENTORY MANAGEMENT -->
+            <!-- TAB 4: KHO HÀNG -->
             <section id="tab-inventory" class="hidden space-y-6">
                 <div class="flex flex-wrap items-center justify-between gap-4 bg-slate-800 p-4 rounded-xl border border-slate-700">
                     <div class="flex items-center gap-3 flex-grow max-w-md">
@@ -311,10 +311,10 @@
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
-                        <button onclick="exportToExcel()" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs px-3 py-2 rounded-lg font-medium flex items-center gap-1.5 transition">
+                        <button onclick="exportToExcel()" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs px-3 py-2 rounded-lg font-medium flex items-center gap-1.5">
                             <i class="fa-solid fa-file-excel"></i> Xuất Excel Kho
                         </button>
-                        <button onclick="openProductModal()" class="role-admin bg-amber-500 hover:bg-amber-400 text-slate-900 text-xs px-3 py-2 rounded-lg font-bold flex items-center gap-1.5 transition">
+                        <button onclick="openProductModal()" class="role-admin bg-amber-500 hover:bg-amber-400 text-slate-900 text-xs px-3 py-2 rounded-lg font-bold flex items-center gap-1.5">
                             <i class="fa-solid fa-plus"></i> Thêm Sản Phẩm Mới
                         </button>
                     </div>
@@ -340,7 +340,7 @@
                 </div>
             </section>
 
-            <!-- TAB 5: HISTORY -->
+            <!-- TAB 5: LỊCH SỬ -->
             <section id="tab-history" class="hidden space-y-6">
                 <div class="flex flex-wrap items-center justify-between gap-4 bg-slate-800 p-4 rounded-xl border border-slate-700">
                     <div class="flex items-center gap-3">
@@ -377,7 +377,35 @@
                 </div>
             </section>
 
-            <!-- TAB 6: SETTINGS -->
+            <!-- TAB 6: QUẢN LÝ NHÂN SỰ (CHỈ ADMIN) -->
+            <section id="tab-users" class="role-admin hidden max-w-4xl mx-auto space-y-6">
+                <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-6">
+                    <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+                        <h2 class="text-xl font-bold text-emerald-400 flex items-center gap-2">
+                            <i class="fa-solid fa-users-gear"></i> Quản Lý Tài Khoản Nhân Viên
+                        </h2>
+                        <button onclick="openUserModal()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-2 rounded-lg font-bold flex items-center gap-1.5 transition">
+                            <i class="fa-solid fa-user-plus"></i> Thêm Nhân Viên Mới
+                        </button>
+                    </div>
+
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-sm text-left text-slate-300">
+                            <thead class="text-xs uppercase bg-slate-900 text-slate-400 border-b border-slate-700">
+                                <tr>
+                                    <th class="px-4 py-3">Tên Đăng Nhập</th>
+                                    <th class="px-4 py-3">Họ Tên Nhân Viên</th>
+                                    <th class="px-4 py-3">Mật Khẩu</th>
+                                    <th class="px-4 py-3 text-center">Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody id="users-table-body" class="divide-y divide-slate-700"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TAB 7: CÀI ĐẶT -->
             <section id="tab-settings" class="role-admin hidden max-w-3xl mx-auto space-y-6">
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-6">
                     <h2 class="text-xl font-bold text-white flex items-center gap-2 border-b border-slate-700 pb-3">
@@ -400,20 +428,19 @@
         </main>
     </div>
 
-    <!-- Modal Form Sản Phẩm Mới (Chỉ Quản Lý) -->
+    <!-- Modal Thêm Sản Phẩm -->
     <div id="product-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="bg-slate-800 border border-slate-700 rounded-xl w-full max-w-lg overflow-hidden shadow-2xl">
             <div class="flex justify-between items-center px-6 py-4 border-b border-slate-700 bg-slate-850">
-                <h3 id="modal-title" class="font-bold text-white">Thêm Sản Phẩm Mới</h3>
+                <h3 class="font-bold text-white">Thêm Sản Phẩm Mới</h3>
                 <button onclick="closeProductModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             
-            <form id="product-form" onsubmit="saveProduct(event)" class="p-6 space-y-4">
-                <input type="hidden" id="p-id">
+            <form onsubmit="saveProduct(event)" class="p-6 space-y-4">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-medium text-slate-400 mb-1">Mã Sản Phẩm *</label>
-                        <input type="text" id="p-code" required placeholder="VD: CAM-70MAI-A500S" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                        <input type="text" id="p-code" required placeholder="VD: CAM-70MAI" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-400 mb-1">Danh Mục</label>
@@ -431,7 +458,7 @@
 
                 <div>
                     <label class="block text-xs font-medium text-slate-400 mb-1">Tên Sản Phẩm / Vật Tư *</label>
-                    <input type="text" id="p-name" required placeholder="VD: Camera hành trình 70mai A500S 2K" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                    <input type="text" id="p-name" required placeholder="VD: Camera 70mai A500S" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
@@ -468,12 +495,42 @@
         </div>
     </div>
 
+    <!-- Modal Thêm Nhân Viên -->
+    <div id="user-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-slate-800 border border-slate-700 rounded-xl w-full max-w-md overflow-hidden shadow-2xl">
+            <div class="flex justify-between items-center px-6 py-4 border-b border-slate-700 bg-slate-850">
+                <h3 class="font-bold text-white">Thêm Tài Khoản Nhân Viên</h3>
+                <button onclick="closeUserModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <form onsubmit="saveUser(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Tên Đăng Nhập (Viết liền không dấu) *</label>
+                    <input type="text" id="u-username" required placeholder="VD: namnv" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Họ Tên Nhân Viên *</label>
+                    <input type="text" id="u-name" required placeholder="VD: Nguyễn Văn Nam" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Mật Khẩu *</label>
+                    <input type="text" id="u-pass" required placeholder="Nhập mật khẩu..." class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3 border-t border-slate-700">
+                    <button type="button" onclick="closeUserModal()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs rounded-lg font-medium">Hủy</button>
+                    <button type="submit" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs rounded-lg font-bold">Tạo Tài Khoản</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- JavaScript Logic -->
     <script>
         const scriptUrl = "https://script.google.com/macros/s/AKfycbxSuDWEYyPzhJIoCfXHWwk78LfHVBjy5LJ2eLocv-bnFS6aX76oPRMmCB8sTZl0ZLkK/exec";
 
-        // Danh sách Tài khoản Phân quyền
-        const USERS = {
+        // Khởi tạo danh sách tài khoản lưu trong localStorage (Mặc định có admin và 1 nhân viên)
+        let systemUsers = JSON.parse(localStorage.getItem('auto_system_users')) || {
             'admin': { pass: '123456', role: 'admin', name: 'Quản Lý (Admin)' },
             'nhanvien': { pass: '123456', role: 'staff', name: 'Nhân Viên Bán Hàng' }
         };
@@ -490,14 +547,14 @@
             document.getElementById('import-date').value = today;
         });
 
-        // HÀM ĐĂNG NHẬP / XÁC THỰC
+        // ĐĂNG NHẬP & PHÂN QUYỀN
         function handleLogin(e) {
             e.preventDefault();
             const u = document.getElementById('login-username').value.trim().toLowerCase();
             const p = document.getElementById('login-password').value.trim();
 
-            if (USERS[u] && USERS[u].pass === p) {
-                currentUser = { username: u, role: USERS[u].role, name: USERS[u].name };
+            if (systemUsers[u] && systemUsers[u].pass === p) {
+                currentUser = { username: u, role: systemUsers[u].role, name: systemUsers[u].name };
                 localStorage.setItem('auto_logged_user', JSON.stringify(currentUser));
                 document.getElementById('login-username').value = '';
                 document.getElementById('login-password').value = '';
@@ -527,7 +584,6 @@
                 mainApp.classList.add('flex');
                 document.getElementById('user-display-name').innerText = currentUser.name;
 
-                // Phân quyền hiển thị giao diện
                 applyPermissions();
             }
         }
@@ -536,19 +592,19 @@
             const adminElements = document.querySelectorAll('.role-admin');
             if (currentUser.role === 'staff') {
                 adminElements.forEach(el => el.classList.add('hidden'));
-                switchTab('sell'); // Nhân viên mặc định vào tab Bán hàng
+                switchTab('sell');
             } else {
                 adminElements.forEach(el => el.classList.remove('hidden'));
-                switchTab('dashboard'); // Quản lý mặc định vào Tổng quan
+                switchTab('dashboard');
             }
         }
 
         function switchTab(tabId) {
-            if (currentUser.role === 'staff' && (tabId === 'dashboard' || tabId === 'import' || tabId === 'settings')) {
+            if (currentUser.role === 'staff' && (tabId === 'dashboard' || tabId === 'import' || tabId === 'users' || tabId === 'settings')) {
                 tabId = 'sell';
             }
 
-            ['dashboard', 'sell', 'import', 'inventory', 'history', 'settings'].forEach(id => {
+            ['dashboard', 'sell', 'import', 'inventory', 'history', 'users', 'settings'].forEach(id => {
                 const el = document.getElementById(`tab-${id}`);
                 if (el) el.classList.add('hidden');
                 const btn = document.getElementById(`nav-${id}`);
@@ -568,6 +624,7 @@
             if (tabId === 'dashboard') renderDashboard();
             if (tabId === 'inventory') renderInventory();
             if (tabId === 'history') renderHistory();
+            if (tabId === 'users') renderUsers();
             if (tabId === 'sell' || tabId === 'import') populateAllSelects();
         }
 
@@ -575,10 +632,67 @@
             return (amount || 0).toLocaleString('vi-VN');
         }
 
-        // --- DASHBOARD LOGIC ---
+        // --- QUẢN LÝ NHÂN SỰ (ADMIN) ---
+        function renderUsers() {
+            const tbody = document.getElementById('users-table-body');
+            const userKeys = Object.keys(systemUsers);
+
+            tbody.innerHTML = userKeys.map(username => {
+                const u = systemUsers[username];
+                return `
+                    <tr class="hover:bg-slate-750 transition border-b border-slate-700/50">
+                        <td class="px-4 py-3 font-mono text-amber-400 font-bold">${username}</td>
+                        <td class="px-4 py-3 text-slate-100">${u.name} ${u.role === 'admin' ? '<span class="text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded ml-2">Quản lý</span>' : ''}</td>
+                        <td class="px-4 py-3 font-mono text-slate-400">${u.pass}</td>
+                        <td class="px-4 py-3 text-center">
+                            ${username !== 'admin' ? `<button onclick="deleteUser('${username}')" class="text-rose-400 hover:text-rose-300 text-xs"><i class="fa-solid fa-trash"></i> Xóa</button>` : '<span class="text-xs text-slate-500 italic">Mặc định</span>'}
+                        </td>
+                    </tr>
+                `;
+            }).join('');
+        }
+
+        function openUserModal() {
+            document.getElementById('u-username').value = '';
+            document.getElementById('u-name').value = '';
+            document.getElementById('u-pass').value = '';
+            document.getElementById('user-modal').classList.remove('hidden');
+        }
+
+        function closeUserModal() {
+            document.getElementById('user-modal').classList.add('hidden');
+        }
+
+        function saveUser(e) {
+            e.preventDefault();
+            const username = document.getElementById('u-username').value.trim().toLowerCase();
+            const name = document.getElementById('u-name').value.trim();
+            const pass = document.getElementById('u-pass').value.trim();
+
+            if (systemUsers[username]) {
+                alert('Tên đăng nhập này đã tồn tại!');
+                return;
+            }
+
+            systemUsers[username] = { pass: pass, role: 'staff', name: name };
+            localStorage.setItem('auto_system_users', JSON.stringify(systemUsers));
+
+            closeUserModal();
+            renderUsers();
+            alert('Đã tạo tài khoản nhân viên thành công!');
+        }
+
+        function deleteUser(username) {
+            if (confirm(`Bạn có chắc muốn xóa tài khoản "${username}"?`)) {
+                delete systemUsers[username];
+                localStorage.setItem('auto_system_users', JSON.stringify(systemUsers));
+                renderUsers();
+            }
+        }
+
+        // --- DASHBOARD ---
         function renderDashboard() {
             if (currentUser.role === 'staff') return;
-
             const filter = document.getElementById('revenue-filter').value;
             const now = new Date();
             let filteredTx = transactions.filter(t => t.type === 'EXPORT');
@@ -619,13 +733,8 @@
             } else {
                 lowStockContainer.innerHTML = lowStockProducts.map(p => `
                     <div class="flex items-center justify-between p-2 rounded bg-slate-900 border border-rose-900/40 text-xs">
-                        <div>
-                            <p class="font-medium text-slate-200">${p.name}</p>
-                            <p class="text-slate-500">${p.code}</p>
-                        </div>
-                        <div class="text-right">
-                            <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold">${p.stock} ${p.unit}</span>
-                        </div>
+                        <div><p class="font-medium text-slate-200">${p.name}</p><p class="text-slate-500">${p.code}</p></div>
+                        <div class="text-right"><span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 font-bold">${p.stock} ${p.unit}</span></div>
                     </div>
                 `).join('');
             }
@@ -656,12 +765,7 @@
                 type: 'bar',
                 data: {
                     labels: days,
-                    datasets: [{
-                        label: 'Doanh thu (VNĐ)',
-                        data: revenues,
-                        backgroundColor: '#f59e0b',
-                        borderRadius: 6
-                    }]
+                    datasets: [{ label: 'Doanh thu (VNĐ)', data: revenues, backgroundColor: '#f59e0b', borderRadius: 6 }]
                 },
                 options: {
                     responsive: true,
@@ -678,7 +782,6 @@
         function populateAllSelects() {
             const sellSelect = document.getElementById('sell-product');
             const importSelect = document.getElementById('import-product');
-
             const options = '<option value="">-- Chọn sản phẩm --</option>' + 
                 products.map(p => `<option value="${p.id}">${p.code} - ${p.name} (Tồn: ${p.stock})</option>`).join('');
 
@@ -686,7 +789,7 @@
             if (importSelect) importSelect.innerHTML = options;
         }
 
-        // --- SELL LOGIC ---
+        // --- BÁN HÀNG ---
         function onSellProductChange() {
             const productId = document.getElementById('sell-product').value;
             const p = products.find(item => item.id === productId);
@@ -709,7 +812,7 @@
 
             if (!product) return alert('Vui lòng chọn sản phẩm!');
             if (product.stock < qty) {
-                if (!confirm(`Số tồn kho (${product.stock}) ít hơn số bán (${qty}). Bạn vẫn muốn bán?`)) return;
+                if (!confirm(`Tồn kho (${product.stock}) ít hơn số bán (${qty}). Vẫn tiếp tục?`)) return;
             }
 
             product.stock -= qty;
@@ -726,20 +829,20 @@
                 costPrice: product.importPrice,
                 customerInfo: document.getElementById('sell-customer').value || '',
                 paymentMethod: document.getElementById('sell-payment').value,
-                note: (currentUser.name ? `[${currentUser.name}] ` : '') + (document.getElementById('sell-note').value || '')
+                note: `[NV: ${currentUser.name}] ` + (document.getElementById('sell-note').value || '')
             };
 
             transactions.unshift(tx);
             saveData();
 
-            alert('Đã tạo đơn bán hàng & trừ kho thành công!');
+            alert('Đã tạo đơn bán hàng thành công!');
             document.getElementById('sell-customer').value = '';
             document.getElementById('sell-note').value = '';
             populateAllSelects();
             switchTab(currentUser.role === 'staff' ? 'inventory' : 'dashboard');
         }
 
-        // --- IMPORT LOGIC ---
+        // --- NHẬP KHO ---
         function onImportProductChange() {
             const productId = document.getElementById('import-product').value;
             const p = products.find(item => item.id === productId);
@@ -783,14 +886,14 @@
             transactions.unshift(tx);
             saveData();
 
-            alert('Đã nhập kho & cộng tồn kho thành công!');
+            alert('Nhập kho thành công!');
             document.getElementById('import-supplier').value = '';
             document.getElementById('import-note').value = '';
             populateAllSelects();
             switchTab('inventory');
         }
 
-        // --- INVENTORY LOGIC ---
+        // --- KHO HÀNG ---
         function renderInventory() {
             const search = document.getElementById('search-inventory').value.toLowerCase();
             const tbody = document.getElementById('inventory-table-body');
@@ -824,9 +927,6 @@
         }
 
         function openProductModal() {
-            document.getElementById('product-form').reset();
-            document.getElementById('p-id').value = '';
-            document.getElementById('modal-title').innerText = 'Thêm Sản Phẩm Mới';
             document.getElementById('product-modal').classList.remove('hidden');
         }
 
@@ -849,18 +949,16 @@
             };
 
             products.push(productData);
-
             saveData();
             closeProductModal();
             renderInventory();
             populateAllSelects();
         }
 
-        // --- HISTORY LOGIC ---
+        // --- LỊCH SỬ ---
         function renderHistory() {
             const filterType = document.getElementById('history-filter-type').value;
             const tbody = document.getElementById('history-table-body');
-
             let filtered = transactions;
             if (filterType !== 'ALL') filtered = filtered.filter(t => t.type === filterType);
 
@@ -872,11 +970,7 @@
             tbody.innerHTML = filtered.map(t => `
                 <tr class="hover:bg-slate-750 transition border-b border-slate-700/50">
                     <td class="px-4 py-3 text-xs text-slate-400 font-mono">${t.date}</td>
-                    <td class="px-4 py-3">
-                        <span class="px-2 py-0.5 rounded text-xs font-bold ${t.type === 'EXPORT' ? 'bg-amber-500/20 text-amber-400' : 'bg-blue-500/20 text-blue-400'}">
-                            ${t.type === 'EXPORT' ? 'BÁN HÀNG' : 'NHẬP KHO'}
-                        </span>
-                    </td>
+                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-bold ${t.type === 'EXPORT' ? 'bg-amber-500/20 text-amber-400' : 'bg-blue-500/20 text-blue-400'}">${t.type === 'EXPORT' ? 'BÁN HÀNG' : 'NHẬP KHO'}</span></td>
                     <td class="px-4 py-3 font-medium text-slate-200">${t.productName}</td>
                     <td class="px-4 py-3 text-center font-bold">${t.quantity}</td>
                     <td class="px-4 py-3 text-right font-mono text-xs">${formatVND(t.price)}</td>
@@ -888,11 +982,10 @@
             `).join('');
         }
 
-        // --- STORAGE & SYNC ---
         function saveData() {
             localStorage.setItem('auto_products', JSON.stringify(products));
             localStorage.setItem('auto_transactions', JSON.stringify(transactions));
-            autoSyncGoogleSheet();
+            syncWithGoogleSheet();
         }
 
         async function syncWithGoogleSheet() {
@@ -901,19 +994,11 @@
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'syncAll',
-                        products: products,
-                        transactions: transactions
-                    })
+                    body: JSON.stringify({ action: 'syncAll', products: products, transactions: transactions })
                 });
             } catch (err) {
                 console.error(err);
             }
-        }
-
-        function autoSyncGoogleSheet() {
-            syncWithGoogleSheet();
         }
 
         function exportToExcel() {
@@ -927,7 +1012,7 @@
             const ws = XLSX.utils.json_to_sheet(transactions);
             const wb = XLSX.utils.book_new();
             XLSX.utils.book_append_sheet(wb, ws, "LichSu");
-            XLSX.writeFile(wb, "Linh_Quan_Auto_Lich_Su_Giao_Dich.xlsx");
+            XLSX.writeFile(wb, "Linh_Quan_Auto_Lich_Su.xlsx");
         }
     </script>
 </body>
