@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-    <!-- Thư viện chụp ảnh Hóa đơn -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -34,14 +33,14 @@
                 <p class="text-xs text-slate-400">Đăng nhập hệ thống quản lý kho & bán hàng</p>
             </div>
 
-            <form onsubmit="handleLogin(event)" class="space-y-4">
+            <form onsubmit="handleLogin(event)" class="space-y-4" autocomplete="off">
                 <div>
                     <label class="block text-xs font-medium text-slate-300 mb-1">Tên Đăng Nhập</label>
-                    <input type="text" id="login-username" required autocomplete="username" placeholder="Nhập tài khoản..." class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-sm text-slate-200 focus:border-amber-500 outline-none">
+                    <input type="text" id="login-username" required autocomplete="off" placeholder="Nhập tài khoản..." class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-sm text-slate-200 focus:border-amber-500 outline-none">
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-slate-300 mb-1">Mật Khẩu</label>
-                    <input type="password" id="login-password" required autocomplete="current-password" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-sm text-slate-200 focus:border-amber-500 outline-none">
+                    <input type="password" id="login-password" required autocomplete="new-password" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-3 text-sm text-slate-200 focus:border-amber-500 outline-none">
                 </div>
                 <div class="flex items-center justify-between text-xs text-slate-300">
                     <label class="flex items-center gap-2 cursor-pointer">
@@ -202,22 +201,31 @@
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-5">
                     <div class="flex items-center justify-between border-b border-slate-700 pb-3">
                         <h2 class="text-xl font-bold text-amber-400 flex items-center gap-2">
-                            <i class="fa-solid fa-cart-shopping"></i> Lên Đơn Dịch Vụ & Lắp Đặt Cho Khách
+                            <i class="fa-solid fa-cart-shopping"></i> Đơn Bán Hàng
                         </h2>
-                        <span class="text-xs bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded border border-amber-500/30">Xuất Kho Nhiều Món</span>
+                        <span class="text-xs bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded border border-amber-500/30">Xuất Kho</span>
                     </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-900 p-4 rounded-xl border border-slate-700">
+                    <!-- TÁCH BIỂN SỐ XE - TÊN - SĐỘ & TẮT GỢI Ý -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 bg-slate-900 p-4 rounded-xl border border-slate-700">
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Ngày Bán / Lắp Đặt</label>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Ngày Bán</label>
                             <input type="date" id="sell-date" required class="w-full bg-slate-800 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Biển Số Xe / Tên Khách Hàng *</label>
-                            <input type="text" id="sell-customer" required placeholder="VD: 30H-123.45 - A.Thịnh" class="w-full bg-slate-800 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200">
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Biển Số Xe</label>
+                            <input type="text" id="sell-plate" placeholder="VD: 30H-123.45" autocomplete="off" class="w-full bg-slate-800 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200 uppercase">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Hình Thức Thanh Toán</label>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Tên Khách Hàng</label>
+                            <input type="text" id="sell-customer-name" placeholder="VD: Anh Thịnh" autocomplete="off" class="w-full bg-slate-800 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Số Điện Thoại</label>
+                            <input type="text" id="sell-phone" placeholder="VD: 0906248494" autocomplete="off" class="w-full bg-slate-800 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Thanh Toán</label>
                             <select id="sell-payment" class="w-full bg-slate-800 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200">
                                 <option value="Chuyển khoản">Chuyển khoản</option>
                                 <option value="Tiền mặt">Tiền mặt</option>
@@ -227,7 +235,7 @@
                     </div>
 
                     <div class="bg-slate-900 p-4 rounded-xl border border-slate-700 space-y-3">
-                        <h3 class="text-sm font-bold text-slate-200"><i class="fa-solid fa-plus-circle text-amber-500 mr-1.5"></i> Thêm Dịch Vụ / Sản Phẩm Vào Đơn</h3>
+                        <h3 class="text-sm font-bold text-slate-200"><i class="fa-solid fa-plus-circle text-amber-500 mr-1.5"></i> Thêm Dịch Vụ / Sản Phẩm</h3>
                         <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
                             <div class="md:col-span-5">
                                 <label class="block text-xs font-medium text-slate-400 mb-1">Chọn Sản Phẩm / Dịch Vụ</label>
@@ -239,7 +247,7 @@
                             </div>
                             <div class="md:col-span-3">
                                 <label class="block text-xs font-medium text-slate-400 mb-1">Đơn Giá Bán</label>
-                                <input type="number" id="cart-price" min="0" value="0" class="w-full bg-slate-800 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200">
+                                <input type="text" id="cart-price" min="0" value="0" oninput="formatCurrencyInput(this)" class="w-full bg-slate-800 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200 font-mono">
                             </div>
                             <div class="md:col-span-2">
                                 <button type="button" onclick="addToCart()" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-2.5 rounded-lg text-sm transition">
@@ -269,8 +277,8 @@
 
                     <div class="flex flex-wrap items-center justify-between gap-4 bg-slate-900 p-4 rounded-xl border border-slate-700">
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Ghi Chú Kỹ Thuật Chung</label>
-                            <input type="text" id="sell-note" placeholder="VD: Dán kính sườn, lắp cam trước sau..." class="bg-slate-800 border border-slate-600 rounded-lg p-2 text-sm text-slate-200 w-80">
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Ghi Chú Kỹ Thuật</label>
+                            <input type="text" id="sell-note" autocomplete="off" placeholder="VD: Dán kính sườn, bảo hành 5 năm..." class="bg-slate-800 border border-slate-600 rounded-lg p-2 text-sm text-slate-200 w-80">
                         </div>
                         <div class="text-right">
                             <p class="text-xs text-slate-400">Tổng Thanh Toán Hóa Đơn:</p>
@@ -278,8 +286,9 @@
                         </div>
                     </div>
 
+                    <!-- NÚT XÁC NHẬN BÁN HÀNG -->
                     <button type="button" onclick="submitCompleteOrder()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold py-3.5 rounded-lg text-sm transition flex items-center justify-center gap-2 shadow-lg">
-                        <i class="fa-solid fa-receipt text-lg"></i> XÁC NHẬN BÁN HÀNG & IN HÓA ĐƠN
+                        <i class="fa-solid fa-check-circle text-lg"></i> XÁC NHẬN
                     </button>
                 </div>
             </section>
@@ -294,7 +303,7 @@
                         <span class="text-xs bg-blue-500/10 text-blue-400 px-2.5 py-1 rounded border border-blue-500/30">Nhập Kho</span>
                     </div>
 
-                    <form onsubmit="handleImportSubmit(event)" class="space-y-4">
+                    <form onsubmit="handleImportSubmit(event)" class="space-y-4" autocomplete="off">
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-medium text-slate-400 mb-1">Ngày Nhập Kho</label>
@@ -312,23 +321,24 @@
                                 <input type="number" id="import-quantity" min="1" value="1" oninput="calculateImportTotal()" required class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200">
                             </div>
                             <div>
-                                <label class="block text-xs font-medium text-slate-400 mb-1">Đơn Giá Nhập / Giá Vốn</label>
-                                <input type="number" id="import-price" min="0" oninput="calculateImportTotal()" required class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200">
+                                <label class="block text-xs font-medium text-slate-400 mb-1">Đơn Giá Nhập (Giá Vốn)</label>
+                                <!-- ĐỊNH DẠNG TỰ ĐỘNG 1.000.000 -->
+                                <input type="text" id="import-price" autocomplete="off" oninput="formatCurrencyInput(this); calculateImportTotal();" required placeholder="0" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200 font-mono">
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-slate-400 mb-1">Tổng Tiền Nhập</label>
-                                <input type="text" id="import-total-display" readonly class="w-full bg-slate-950 border border-slate-700 text-blue-400 font-bold rounded-lg p-2.5 text-sm">
+                                <input type="text" id="import-total-display" readonly class="w-full bg-slate-950 border border-slate-700 text-blue-400 font-bold rounded-lg p-2.5 text-sm font-mono">
                             </div>
                         </div>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-xs font-medium text-slate-400 mb-1">Nhà Cung Cấp / Nguồn Hàng</label>
-                                <input type="text" id="import-supplier" placeholder="VD: Khắc Trung Auto..." class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200">
+                                <input type="text" id="import-supplier" autocomplete="off" placeholder="VD: Khắc Trung Auto..." class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200">
                             </div>
                             <div>
                                 <label class="block text-xs font-medium text-slate-400 mb-1">Ghi Chú Nhập Kho</label>
-                                <input type="text" id="import-note" placeholder="Số hóa đơn, đợt nhập..." class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200">
+                                <input type="text" id="import-note" autocomplete="off" placeholder="Số hóa đơn, đợt nhập..." class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200">
                             </div>
                         </div>
 
@@ -344,7 +354,7 @@
                 <div class="flex flex-wrap items-center justify-between gap-4 bg-slate-800 p-4 rounded-xl border border-slate-700">
                     <div class="flex items-center gap-3 flex-grow max-w-md">
                         <div class="relative w-full">
-                            <input type="text" id="search-inventory" onkeyup="renderInventory()" placeholder="Tìm theo tên, mã sản phẩm, danh mục..." class="w-full bg-slate-900 border border-slate-600 rounded-lg pl-9 pr-4 py-2 text-sm text-slate-200 focus:outline-none">
+                            <input type="text" id="search-inventory" autocomplete="off" onkeyup="renderInventory()" placeholder="Tìm theo tên, mã sản phẩm, danh mục..." class="w-full bg-slate-900 border border-slate-600 rounded-lg pl-9 pr-4 py-2 text-sm text-slate-200 focus:outline-none">
                             <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-sm"></i>
                         </div>
                     </div>
@@ -352,7 +362,8 @@
                         <button onclick="exportToExcel()" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs px-3 py-2 rounded-lg font-medium flex items-center gap-1.5">
                             <i class="fa-solid fa-file-excel"></i> Xuất Excel Kho
                         </button>
-                        <button onclick="openProductModal()" class="role-admin bg-amber-500 hover:bg-amber-400 text-slate-900 text-xs px-3 py-2 rounded-lg font-bold flex items-center gap-1.5">
+                        <!-- KẾ TOÁN VÀ ADMIN CÓ QUYỀN THÊM SẢN PHẨM MỚI -->
+                        <button onclick="openProductModal()" class="role-admin-accountant bg-amber-500 hover:bg-amber-400 text-slate-900 text-xs px-3 py-2 rounded-lg font-bold flex items-center gap-1.5">
                             <i class="fa-solid fa-plus"></i> Thêm Sản Phẩm Mới
                         </button>
                     </div>
@@ -378,36 +389,27 @@
                 </div>
             </section>
 
-            <!-- TAB 5: LỊCH SỬ -->
+            <!-- TAB 5: LỊCH SỬ TÁCH BIỆT BÁN HÀNG VÀ NHẬP HÀNG -->
             <section id="tab-history" class="role-admin-accountant hidden space-y-6">
                 <div class="flex flex-wrap items-center justify-between gap-4 bg-slate-800 p-4 rounded-xl border border-slate-700">
                     <div class="flex items-center gap-3">
-                        <select id="history-filter-type" onchange="renderHistory()" class="bg-slate-900 border border-slate-600 text-slate-200 text-sm rounded-lg p-2">
-                            <option value="ALL">Tất cả lịch sử</option>
-                            <option value="EXPORT">Chỉ Đơn Bán Hàng / Xuất Kho</option>
-                            <option value="IMPORT">Chỉ Đơn Nhập Kho</option>
-                        </select>
+                        <button onclick="switchHistorySubTab('EXPORT')" id="btn-hist-export" class="px-4 py-2 rounded-lg text-xs font-bold transition bg-amber-500 text-slate-900">
+                            <i class="fa-solid fa-cart-shopping mr-1"></i> Lịch Sử Bán Hàng
+                        </button>
+                        <button onclick="switchHistorySubTab('IMPORT')" id="btn-hist-import" class="px-4 py-2 rounded-lg text-xs font-bold transition bg-slate-700 text-slate-300">
+                            <i class="fa-solid fa-boxes-packing mr-1"></i> Lịch Sử Nhập Hàng
+                        </button>
                     </div>
                     <button onclick="exportHistoryToExcel()" class="bg-emerald-700 hover:bg-emerald-600 text-white text-xs px-3 py-2 rounded-lg font-medium flex items-center gap-1.5">
-                        <i class="fa-solid fa-file-excel"></i> Xuất Nhật Ký Excel
+                        <i class="fa-solid fa-file-excel"></i> Xuất Excel Lịch Sử
                     </button>
                 </div>
 
                 <div class="bg-slate-800 rounded-xl border border-slate-700 overflow-hidden">
                     <div class="overflow-x-auto">
                         <table class="w-full text-sm text-left text-slate-300">
-                            <thead class="text-xs uppercase bg-slate-900 text-slate-400 border-b border-slate-700">
-                                <tr>
-                                    <th class="px-4 py-3">Thời Gian</th>
-                                    <th class="px-4 py-3">Loại</th>
-                                    <th class="px-4 py-3">Sản Phẩm</th>
-                                    <th class="px-4 py-3 text-center">Số Lượng</th>
-                                    <th class="px-4 py-3 text-right">Đơn Giá</th>
-                                    <th class="px-4 py-3 text-right">Tổng Tiền</th>
-                                    <th class="px-4 py-3">Biển Số Xe / Khách / NCC</th>
-                                    <th class="px-4 py-3">Thanh Toán</th>
-                                    <th class="px-4 py-3">Ghi Chú</th>
-                                </tr>
+                            <thead class="text-xs uppercase bg-slate-900 text-slate-400 border-b border-slate-700" id="history-table-head">
+                                <!-- Render Động theo subtab -->
                             </thead>
                             <tbody id="history-table-body" class="divide-y divide-slate-700"></tbody>
                         </table>
@@ -420,9 +422,10 @@
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-6">
                     <div class="flex justify-between items-center border-b border-slate-700 pb-3">
                         <h2 class="text-xl font-bold text-emerald-400 flex items-center gap-2">
-                            <i class="fa-solid fa-users-gear"></i> Quản Lý Tài Khoản Nhân Sự & Kế Toán
+                            <i class="fa-solid fa-users-gear"></i> Quản Lý Tài Khoản Nhân Sự
                         </h2>
-                        <button onclick="openUserModal()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-2 rounded-lg font-bold flex items-center gap-1.5 transition">
+                        <!-- CHỈ ADMIN MỚI CÓ NÚT THÊM/SỬA/XÓA NHÂN SỰ -->
+                        <button onclick="openUserModal()" class="role-admin bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-2 rounded-lg font-bold flex items-center gap-1.5 transition">
                             <i class="fa-solid fa-user-plus"></i> Thêm Tài Khoản Mới
                         </button>
                     </div>
@@ -454,7 +457,7 @@
                         <div class="bg-slate-900 p-4 rounded-lg border border-slate-700 flex flex-wrap items-center justify-between gap-4">
                             <div>
                                 <p class="text-xs text-slate-400">Đường dẫn Google Sheets API (Linh Quân Auto):</p>
-                                <p class="text-xs font-mono text-emerald-400 mt-1 break-all">Đã được cấu hình bảo mật cố định trong hệ thống</p>
+                                <p class="text-xs font-mono text-emerald-400 mt-1 break-all">Đã được cấu hình đồng bộ bảo mật</p>
                             </div>
                             <button onclick="fetchCloudData()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-4 py-2 rounded-lg text-xs transition flex items-center gap-1.5">
                                 <i class="fa-solid fa-rotate"></i> Đồng Bộ Ngay
@@ -472,7 +475,7 @@
         <div class="bg-slate-800 border border-slate-700 rounded-xl w-full max-w-lg overflow-hidden shadow-2xl my-8">
             <div class="flex justify-between items-center px-6 py-4 border-b border-slate-700 bg-slate-850 no-print">
                 <h3 class="font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-receipt text-amber-500"></i> Hóa Đơn Khách Hàng
+                    <i class="fa-solid fa-receipt text-amber-500"></i> Hóa Đơn Bán Hàng
                 </h3>
                 <button onclick="closeBillModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
@@ -480,21 +483,25 @@
             <div class="p-6 bg-white text-slate-900 font-sans space-y-4" id="printable-bill">
                 <div class="text-center border-b border-slate-300 pb-3">
                     <h2 class="text-xl font-bold tracking-wider text-slate-900">LINH QUÂN AUTO</h2>
-                    <p class="text-xs text-slate-600 mt-0.5">Chuyên Phụ Kiện - Đồ Chơi Ô Tô Cao Cấp</p>
-                    <p class="text-xs text-slate-500">Hotline/Zalo: 0906.248.494</p>
+                    <!-- THAY ĐỔI CẦU CHỮ HEADER THEO YÊU CẦU 4 -->
+                    <p class="text-xs font-semibold text-slate-700 mt-0.5">Chuyên Film Cách Nhiệt - PPF - Phụ Kiện - Đồ Chơi Ô Tô Cao Cấp</p>
+                    <p class="text-xs font-bold text-slate-800">Hotline/Zalo: 0827.286.319</p>
                 </div>
 
+                <!-- TÁCH BIỂN SỐ XE - TÊN - SĐỘ THEO YÊU CẦU 2 & DẠNG NGÀY DD/MM/YYYY -->
                 <div class="text-xs space-y-1">
-                    <div class="flex justify-between"><span class="text-slate-500">Mã hóa đơn:</span><span id="bill-id" class="font-bold font-mono">#LQ123456</span></div>
-                    <div class="flex justify-between"><span class="text-slate-500">Ngày dịch vụ:</span><span id="bill-date">23/10/2026</span></div>
-                    <div class="flex justify-between"><span class="text-slate-500">Khách / Biển xe:</span><span id="bill-customer" class="font-bold text-amber-700">30H-123.45</span></div>
-                    <div class="flex justify-between"><span class="text-slate-500">Thanh toán:</span><span id="bill-payment">Chuyển khoản</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">Mã hóa đơn:</span><span id="bill-id" class="font-bold font-mono">#LQ00001</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">Ngày xuất:</span><span id="bill-date">23/10/2026</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">Biển số xe:</span><span id="bill-plate" class="font-bold text-amber-700">30H-123.45</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">Tên khách hàng:</span><span id="bill-customer-name" class="font-bold">Anh Thịnh</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">Số điện thoại:</span><span id="bill-phone" class="font-mono">0906248494</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">Hình thức thanh toán:</span><span id="bill-payment">Chuyển khoản</span></div>
                 </div>
 
                 <table class="w-full text-xs text-left border-collapse border-t border-b border-slate-300 my-2">
                     <thead>
                         <tr class="border-b border-slate-300 bg-slate-100">
-                            <th class="py-2 px-1">Dịch Vụ / Phụ Kiện</th>
+                            <th class="py-2 px-1">Tên Dịch Vụ / Sản Phẩm</th>
                             <th class="py-2 px-1 text-center">SL</th>
                             <th class="py-2 px-1 text-right">Đơn Giá</th>
                             <th class="py-2 px-1 text-right">Thành Tiền</th>
@@ -530,7 +537,7 @@
         </div>
     </div>
 
-    <!-- Modal Thêm Sản Phẩm -->
+    <!-- Modal Thêm Sản Phẩm Mới (Cho phép thêm Danh Mục Mới - Yêu cầu 8) -->
     <div id="product-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="bg-slate-800 border border-slate-700 rounded-xl w-full max-w-lg overflow-hidden shadow-2xl">
             <div class="flex justify-between items-center px-6 py-4 border-b border-slate-700 bg-slate-850">
@@ -538,39 +545,39 @@
                 <button onclick="closeProductModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             
-            <form onsubmit="saveProduct(event)" class="p-6 space-y-4">
+            <form onsubmit="saveProduct(event)" class="p-6 space-y-4" autocomplete="off">
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-medium text-slate-400 mb-1">Mã Sản Phẩm *</label>
-                        <input type="text" id="p-code" required placeholder="VD: CAM-70MAI" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                        <input type="text" id="p-code" required autocomplete="off" placeholder="VD: FILM-3M" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200 uppercase">
                     </div>
                     <div>
-                        <label class="block text-xs font-medium text-slate-400 mb-1">Danh Mục</label>
-                        <select id="p-category" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
-                            <option value="Camera Hành Trình">Camera Hành Trình</option>
-                            <option value="Màn Hình Android">Màn Hình Android</option>
-                            <option value="Bơm Lốp / Phụ Kiện">Bơm Lốp / Phụ Kiện</option>
-                            <option value="Bọc Ghế / Thảm Trải Sàn">Bọc Ghế / Thảm Trải Sàn</option>
-                            <option value="Đèn / Cảm Biến">Đèn / Cảm Biến</option>
-                            <option value="Âm Thanh Ô Tô">Âm Thanh Ô Tô</option>
-                            <option value="Dịch Vụ Lắp Đặt">Dịch Vụ Lắp Đặt</option>
-                        </select>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Danh Mục (Hoặc gõ danh mục mới)</label>
+                        <input type="text" id="p-category" list="category-options" autocomplete="off" placeholder="VD: Film Cách Nhiệt..." class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                        <datalist id="category-options">
+                            <option value="Film Cách Nhiệt"></option>
+                            <option value="PPF Cánh - Nắp Capo"></option>
+                            <option value="Camera Hành Trình"></option>
+                            <option value="Màn Hình Android"></option>
+                            <option value="Âm Thanh Ô Tô"></option>
+                            <option value="Đèn / Cảm Biến"></option>
+                        </datalist>
                     </div>
                 </div>
 
                 <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Tên Sản Phẩm / Vật Tư *</label>
-                    <input type="text" id="p-name" required placeholder="VD: Camera 70mai A500S" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Tên Sản Phẩm / Dịch Vụ *</label>
+                    <input type="text" id="p-name" required autocomplete="off" placeholder="VD: Dán Film 3M Crystalline Full Xe" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
                 </div>
 
                 <div class="grid grid-cols-2 gap-4">
                     <div>
                         <label class="block text-xs font-medium text-slate-400 mb-1">Giá Nhập (Vốn)</label>
-                        <input type="number" id="p-import-price" min="0" value="0" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                        <input type="text" id="p-import-price" autocomplete="off" oninput="formatCurrencyInput(this)" value="0" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200 font-mono">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-400 mb-1">Giá Bán / Lắp Đặt</label>
-                        <input type="number" id="p-export-price" min="0" value="0" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                        <input type="text" id="p-export-price" autocomplete="off" oninput="formatCurrencyInput(this)" value="0" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200 font-mono">
                     </div>
                 </div>
 
@@ -581,7 +588,7 @@
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-400 mb-1">Đơn Vị Tính</label>
-                        <input type="text" id="p-unit" value="Bộ" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                        <input type="text" id="p-unit" value="Bộ" autocomplete="off" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
                     </div>
                     <div>
                         <label class="block text-xs font-medium text-slate-400 mb-1">Tồn Tối Thiểu</label>
@@ -597,34 +604,34 @@
         </div>
     </div>
 
-    <!-- Modal Thêm Tài Khoản -->
+    <!-- Modal Thêm Tài Khoản (Admin) -->
     <div id="user-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="bg-slate-800 border border-slate-700 rounded-xl w-full max-w-md overflow-hidden shadow-2xl">
             <div class="flex justify-between items-center px-6 py-4 border-b border-slate-700 bg-slate-850">
-                <h3 class="font-bold text-white">Thêm Tài Khoản Mới</h3>
+                <h3 class="font-bold text-white">Thêm Tài Khoản Nhân Sự</h3>
                 <button onclick="closeUserModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             
-            <form onsubmit="saveUser(event)" class="p-6 space-y-4">
+            <form onsubmit="saveUser(event)" class="p-6 space-y-4" autocomplete="off">
                 <div>
                     <label class="block text-xs font-medium text-slate-400 mb-1">Tên Đăng Nhập (Viết liền không dấu) *</label>
-                    <input type="text" id="u-username" required placeholder="VD: ketoan2" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                    <input type="text" id="u-username" required autocomplete="off" placeholder="VD: ketoan2" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-slate-400 mb-1">Họ Tên *</label>
-                    <input type="text" id="u-name" required placeholder="VD: Nguyễn Thị Mai" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                    <input type="text" id="u-name" required autocomplete="off" placeholder="VD: Nguyễn Thị Mai" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-slate-400 mb-1">Chọn Vai Trò *</label>
                     <select id="u-role" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
-                        <option value="accountant">Kế Toán (Doanh thu, Nhập/Xuất kho, Lịch sử)</option>
-                        <option value="staff">Nhân Viên Bán Hàng (Chỉ bán hàng, xem kho)</option>
+                        <option value="accountant">Kế Toán (Nhập/Xuất kho, Bán hàng, Thêm sản phẩm)</option>
+                        <option value="staff">Nhân Viên Bán Hàng (Bán hàng, Xem kho)</option>
                         <option value="admin">Quản Lý / Admin (Toàn quyền)</option>
                     </select>
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-slate-400 mb-1">Mật Khẩu *</label>
-                    <input type="text" id="u-pass" required placeholder="Nhập mật khẩu..." class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                    <input type="text" id="u-pass" required autocomplete="off" placeholder="Nhập mật khẩu..." class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
                 </div>
 
                 <div class="flex justify-end gap-3 pt-3 border-t border-slate-700">
@@ -635,7 +642,7 @@
         </div>
     </div>
 
-    <!-- Modal Đổi Mật Khẩu Nhanh -->
+    <!-- Modal Đổi Mật Khẩu -->
     <div id="change-pass-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="bg-slate-800 border border-slate-700 rounded-xl w-full max-w-md overflow-hidden shadow-2xl">
             <div class="flex justify-between items-center px-6 py-4 border-b border-slate-700 bg-slate-850">
@@ -645,18 +652,18 @@
                 <button onclick="closeChangePassModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             
-            <form onsubmit="handleChangePass(event)" class="p-6 space-y-4">
+            <form onsubmit="handleChangePass(event)" class="p-6 space-y-4" autocomplete="off">
                 <div>
                     <label class="block text-xs font-medium text-slate-400 mb-1">Mật Khẩu Hiện Tại *</label>
-                    <input type="password" id="cp-current-pass" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                    <input type="password" id="cp-current-pass" required autocomplete="new-password" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-slate-400 mb-1">Mật Khẩu Mới *</label>
-                    <input type="password" id="cp-new-pass" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                    <input type="password" id="cp-new-pass" required autocomplete="new-password" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-slate-400 mb-1">Xác Nhận Mật Khẩu Mới *</label>
-                    <input type="password" id="cp-confirm-pass" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                    <input type="password" id="cp-confirm-pass" required autocomplete="new-password" placeholder="••••••••" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
                 </div>
 
                 <div class="flex justify-end gap-3 pt-3 border-t border-slate-700">
@@ -667,7 +674,7 @@
         </div>
     </div>
 
-    <!-- JavaScript Logic -->
+    <!-- JavaScript Core Logic -->
     <script>
         const scriptUrl = "https://script.google.com/macros/s/AKfycbxSuDWEYyPzhJIoCfXHWwk78LfHVBjy5LJ2eLocv-bnFS6aX76oPRMmCB8sTZl0ZLkK/exec";
 
@@ -680,7 +687,11 @@
         let systemUsers = JSON.parse(localStorage.getItem('auto_system_users')) || defaultUsers;
         let currentUser = JSON.parse(localStorage.getItem('auto_logged_user')) || null;
         let products = JSON.parse(localStorage.getItem('auto_products')) || [];
-        let transactions = JSON.parse(localStorage.getItem('auto_transactions')) || [];
+        let salesHistory = JSON.parse(localStorage.getItem('auto_sales_history')) || [];
+        let importHistory = JSON.parse(localStorage.getItem('auto_import_history')) || [];
+        let nextBillNumber = Number(localStorage.getItem('auto_bill_seq')) || 1; // MÃ HÓA ĐƠN BẮT ĐẦU TỪ #LQ00001
+        
+        let activeHistoryTab = 'EXPORT'; // EXPORT (Bán Hàng) hoặc IMPORT (Nhập Hàng)
         let revenueChartInstance = null;
         let sellCart = [];
 
@@ -692,11 +703,34 @@
             if(sellDateEl) sellDateEl.value = today;
             if(importDateEl) importDateEl.value = today;
 
-            // Tải dữ liệu Đám mây đồng bộ khi mở trang
             await fetchCloudData();
         });
 
-        // Hàm tải toàn bộ dữ liệu mới nhất từ Google Sheets về máy
+        // ĐỊNH DẠNG TỰ ĐỘNG SỐ TIỀN 1.000.000 KHI GÕ (YÊU CẦU 13)
+        function formatCurrencyInput(input) {
+            let value = input.value.replace(/\D/g, '');
+            if (value === '') {
+                input.value = '';
+                return;
+            }
+            input.value = Number(value).toLocaleString('vi-VN');
+        }
+
+        function parseCurrencyValue(str) {
+            if (!str) return 0;
+            return Number(String(str).replace(/\D/g, '')) || 0;
+        }
+
+        // CHUYỂN ĐỔI NGÀY SANG DẠNG DD/MM/YYYY (YÊU CẦU 9)
+        function formatDateVN(dateString) {
+            if (!dateString) return '';
+            const parts = dateString.split('-');
+            if (parts.length === 3) {
+                return `${parts[2]}/${parts[1]}/${parts[0]}`;
+            }
+            return dateString;
+        }
+
         async function fetchCloudData() {
             const syncIcon = document.getElementById('sync-icon');
             if(syncIcon) syncIcon.classList.add('fa-spin');
@@ -708,16 +742,23 @@
                         products = data.products;
                         localStorage.setItem('auto_products', JSON.stringify(products));
                     }
-                    if (data.transactions) {
-                        transactions = data.transactions;
-                        localStorage.setItem('auto_transactions', JSON.stringify(transactions));
+                    if (data.sales) {
+                        salesHistory = data.sales;
+                        localStorage.setItem('auto_sales_history', JSON.stringify(salesHistory));
+                    }
+                    if (data.imports) {
+                        importHistory = data.imports;
+                        localStorage.setItem('auto_import_history', JSON.stringify(importHistory));
                     }
                     if (data.users && Object.keys(data.users).length > 0) {
                         systemUsers = { ...defaultUsers, ...data.users };
                         localStorage.setItem('auto_system_users', JSON.stringify(systemUsers));
                     }
+                    if (data.nextBillSeq) {
+                        nextBillNumber = data.nextBillSeq;
+                        localStorage.setItem('auto_bill_seq', nextBillNumber);
+                    }
                     
-                    // Render lại giao diện sau khi có dữ liệu đám mây mới
                     if (currentUser) {
                         populateAllSelects();
                         renderInventory();
@@ -727,7 +768,7 @@
                     }
                 }
             } catch (err) {
-                console.warn("Chế độ Offline / Không kết nối được tới Sheets:", err);
+                console.warn("Chế độ Offline:", err);
             } finally {
                 if(syncIcon) syncIcon.classList.remove('fa-spin');
             }
@@ -744,10 +785,7 @@
             const p = pInput.value.trim();
 
             if (btnSubmit) btnSubmit.innerText = 'ĐANG ĐỒNG BỘ...';
-
-            // Đảm bảo lấy dữ liệu người dùng mới nhất từ Google Sheets trước khi xác thực
             await fetchCloudData();
-
             if (btnSubmit) btnSubmit.innerText = 'ĐĂNG NHẬP';
 
             if (systemUsers[u] && String(systemUsers[u].pass) === String(p)) {
@@ -797,6 +835,7 @@
                 noStaffElements.forEach(el => el.classList.add('hidden'));
                 switchTab('inventory');
             } else if (currentUser.role === 'accountant') {
+                // KẾ TOÁN CÓ THÊM QUYỀN THÊM SẢN PHẨM TRONG KHO (YÊU CẦU 7)
                 adminElements.forEach(el => el.classList.add('hidden'));
                 adminAccountantElements.forEach(el => el.classList.remove('hidden'));
                 noStaffElements.forEach(el => el.classList.remove('hidden'));
@@ -869,7 +908,7 @@
                 return;
             }
             if (newPass !== confirmPass) {
-                alert('Mật khẩu mới và xác nhận mật khẩu không trùng khớp!');
+                alert('Mật khẩu mới không trùng khớp!');
                 return;
             }
 
@@ -897,7 +936,10 @@
                         <td class="px-4 py-3">${roleBadge}</td>
                         <td class="px-4 py-3 font-mono text-slate-400">${u.pass}</td>
                         <td class="px-4 py-3 text-center">
-                            ${username !== 'admin' ? `<button onclick="deleteUser('${username}')" class="text-rose-400 hover:text-rose-300 text-xs"><i class="fa-solid fa-trash"></i> Xóa</button>` : '<span class="text-xs text-slate-500 italic">Mặc định</span>'}
+                            <!-- CHỈ ADMIN MỚI CÓ QUYỀN SỬA/XÓA NHÂN SỰ (YÊU CẦU 12) -->
+                            ${currentUser.role === 'admin' && username !== 'admin' ? 
+                                `<button onclick="deleteUser('${username}')" class="text-rose-400 hover:text-rose-300 text-xs font-bold"><i class="fa-solid fa-trash"></i> Xóa</button>` : 
+                                '<span class="text-xs text-slate-500 italic">Mặc định</span>'}
                         </td>
                     </tr>
                 `;
@@ -905,6 +947,7 @@
         }
 
         function openUserModal() {
+            if (currentUser.role !== 'admin') return alert('Chỉ có tài khoản Admin mới có quyền thêm nhân sự!');
             document.getElementById('u-username').value = '';
             document.getElementById('u-name').value = '';
             document.getElementById('u-pass').value = '';
@@ -917,6 +960,8 @@
 
         function saveUser(e) {
             e.preventDefault();
+            if (currentUser.role !== 'admin') return alert('Chỉ có tài khoản Admin mới có quyền quản lý nhân sự!');
+
             const username = document.getElementById('u-username').value.trim().toLowerCase();
             const name = document.getElementById('u-name').value.trim();
             const role = document.getElementById('u-role').value;
@@ -935,6 +980,7 @@
         }
 
         function deleteUser(username) {
+            if (currentUser.role !== 'admin') return alert('Chỉ Admin mới có quyền xóa nhân sự!');
             if (confirm(`Bạn có chắc muốn xóa tài khoản "${username}"?`)) {
                 delete systemUsers[username];
                 saveData();
@@ -946,33 +992,33 @@
             if (currentUser.role === 'staff') return;
             const filter = document.getElementById('revenue-filter').value;
             const now = new Date();
-            let filteredTx = transactions.filter(t => t.type === 'EXPORT');
+            let filteredSales = salesHistory;
 
             if (filter === 'today') {
                 const todayStr = now.toISOString().split('T')[0];
-                filteredTx = filteredTx.filter(t => t.date === todayStr);
+                filteredSales = filteredSales.filter(s => s.date === todayStr);
             } else if (filter === '7days') {
                 const sevenDaysAgo = new Date();
                 sevenDaysAgo.setDate(now.getDate() - 7);
-                filteredTx = filteredTx.filter(t => new Date(t.date) >= sevenDaysAgo);
+                filteredSales = filteredSales.filter(s => new Date(s.date) >= sevenDaysAgo);
             } else if (filter === 'month') {
                 const currentMonth = now.getMonth();
                 const currentYear = now.getFullYear();
-                filteredTx = filteredTx.filter(t => {
-                    const d = new Date(t.date);
+                filteredSales = filteredSales.filter(s => {
+                    const d = new Date(s.date);
                     return d.getMonth() === currentMonth && d.getFullYear() === currentYear;
                 });
             }
 
-            const totalRevenue = filteredTx.reduce((sum, t) => sum + (Number(t.total) || 0), 0);
-            const totalCost = filteredTx.reduce((sum, t) => sum + ((Number(t.costPrice) || 0) * Number(t.quantity)), 0);
+            const totalRevenue = filteredSales.reduce((sum, s) => sum + (Number(s.total) || 0), 0);
+            const totalCost = filteredSales.reduce((sum, s) => sum + ((Number(s.costPrice) || 0) * Number(s.quantity)), 0);
             const profit = totalRevenue - totalCost;
 
             const stockValue = products.reduce((sum, p) => sum + ((Number(p.importPrice) || 0) * (Number(p.stock) || 0)), 0);
             const lowStockProducts = products.filter(p => Number(p.stock) <= Number(p.minStock || 2));
 
             document.getElementById('stat-revenue').innerText = formatVND(totalRevenue);
-            document.getElementById('stat-revenue-sub').innerText = `${filteredTx.length} giao dịch xuất kho`;
+            document.getElementById('stat-revenue-sub').innerText = `${filteredSales.length} dịch vụ bán hàng`;
             document.getElementById('stat-profit').innerText = formatVND(profit);
             document.getElementById('stat-stock-value').innerText = formatVND(stockValue);
             document.getElementById('stat-total-items').innerText = `${products.length} loại sản phẩm`;
@@ -1006,9 +1052,9 @@
                 const dateStr = d.toISOString().split('T')[0];
                 days.push(`${d.getDate()}/${d.getMonth()+1}`);
 
-                const dayRevenue = transactions
-                    .filter(t => t.type === 'EXPORT' && t.date === dateStr)
-                    .reduce((sum, t) => sum + (Number(t.total) || 0), 0);
+                const dayRevenue = salesHistory
+                    .filter(s => s.date === dateStr)
+                    .reduce((sum, s) => sum + (Number(s.total) || 0), 0);
                 revenues.push(dayRevenue);
             }
 
@@ -1046,14 +1092,14 @@
             const productId = document.getElementById('cart-product-select').value;
             const p = products.find(item => item.id === productId);
             if (p) {
-                document.getElementById('cart-price').value = p.exportPrice;
+                document.getElementById('cart-price').value = formatVND(p.exportPrice);
             }
         }
 
         function addToCart() {
             const productId = document.getElementById('cart-product-select').value;
             const qty = Number(document.getElementById('cart-quantity').value) || 0;
-            const price = Number(document.getElementById('cart-price').value) || 0;
+            const price = parseCurrencyValue(document.getElementById('cart-price').value);
             const product = products.find(p => p.id === productId);
 
             if (!product) return alert('Vui lòng chọn sản phẩm / dịch vụ!');
@@ -1115,66 +1161,64 @@
         }
 
         function submitCompleteOrder() {
-            const customer = document.getElementById('sell-customer').value.trim();
+            const plate = document.getElementById('sell-plate').value.trim();
+            const customerName = document.getElementById('sell-customer-name').value.trim();
+            const phone = document.getElementById('sell-phone').value.trim();
             const date = document.getElementById('sell-date').value;
             const paymentMethod = document.getElementById('sell-payment').value;
             const note = document.getElementById('sell-note').value.trim();
 
-            if (!customer) {
-                alert('Vui lòng nhập tên khách hàng hoặc biển số xe!');
-                document.getElementById('sell-customer').focus();
-                return;
-            }
             if (sellCart.length === 0) {
-                alert('Giỏ hàng đang trống! Vui lòng thêm ít nhất một dịch vụ/sản phẩm.');
+                alert('Giỏ hàng đang trống! Vui lòng thêm dịch vụ.');
                 return;
             }
 
-            for (let item of sellCart) {
-                const p = products.find(prod => prod.id === item.productId);
-                if (p && p.stock < item.quantity) {
-                    if (!confirm(`Sản phẩm "${p.name}" tồn kho chỉ còn ${p.stock}, nhưng đơn bán ${item.quantity}. Vẫn tiếp tục?`)) return;
-                }
-            }
-
-            const billId = 'LQ' + Math.floor(100000 + Math.random() * 900000);
+            // TẠO MÃ HÓA ĐƠN TỰ ĐỘNG TĂNG TỪ #LQ00001 (YÊU CẦU 3)
+            const formattedSeq = String(nextBillNumber).padStart(5, '0');
+            const billId = 'LQ' + formattedSeq;
+            nextBillNumber++;
 
             sellCart.forEach(item => {
                 const product = products.find(p => p.id === item.productId);
                 if (product) product.stock -= item.quantity;
 
-                const tx = {
+                const saleRecord = {
                     id: billId,
                     date: date,
-                    type: 'EXPORT',
+                    plate: plate || '-',
+                    customerName: customerName || '-',
+                    phone: phone || '-',
                     productId: item.productId,
                     productName: item.productName,
                     quantity: item.quantity,
                     price: item.price,
                     total: item.total,
                     costPrice: item.costPrice,
-                    customerInfo: customer,
                     paymentMethod: paymentMethod,
                     note: `[${currentUser.name}] ${note}`
                 };
-                transactions.unshift(tx);
+                salesHistory.unshift(saleRecord);
             });
 
             saveData();
 
-            openBillModal(billId, date, customer, paymentMethod, note, [...sellCart]);
+            openBillModal(billId, date, plate, customerName, phone, paymentMethod, note, [...sellCart]);
 
             sellCart = [];
-            document.getElementById('sell-customer').value = '';
+            document.getElementById('sell-plate').value = '';
+            document.getElementById('sell-customer-name').value = '';
+            document.getElementById('sell-phone').value = '';
             document.getElementById('sell-note').value = '';
             renderCartTable();
             populateAllSelects();
         }
 
-        function openBillModal(billId, date, customer, payment, note, cartItems) {
+        function openBillModal(billId, date, plate, name, phone, payment, note, cartItems) {
             document.getElementById('bill-id').innerText = '#' + billId;
-            document.getElementById('bill-date').innerText = date;
-            document.getElementById('bill-customer').innerText = customer;
+            document.getElementById('bill-date').innerText = formatDateVN(date);
+            document.getElementById('bill-plate').innerText = plate || '-';
+            document.getElementById('bill-customer-name').innerText = name || '-';
+            document.getElementById('bill-phone').innerText = phone || '-';
             document.getElementById('bill-payment').innerText = payment;
             document.getElementById('bill-note').innerText = note || 'Không có';
 
@@ -1218,13 +1262,13 @@
         function onImportProductChange() {
             const productId = document.getElementById('import-product').value;
             const p = products.find(item => item.id === productId);
-            if (p) document.getElementById('import-price').value = p.importPrice;
+            if (p) document.getElementById('import-price').value = formatVND(p.importPrice);
             calculateImportTotal();
         }
 
         function calculateImportTotal() {
             const qty = Number(document.getElementById('import-quantity').value) || 0;
-            const price = Number(document.getElementById('import-price').value) || 0;
+            const price = parseCurrencyValue(document.getElementById('import-price').value);
             document.getElementById('import-total-display').value = formatVND(qty * price);
         }
 
@@ -1232,7 +1276,7 @@
             e.preventDefault();
             const productId = document.getElementById('import-product').value;
             const qty = Number(document.getElementById('import-quantity').value) || 0;
-            const price = Number(document.getElementById('import-price').value) || 0;
+            const price = parseCurrencyValue(document.getElementById('import-price').value);
             const product = products.find(p => p.id === productId);
 
             if (!product) return alert('Vui lòng chọn sản phẩm!');
@@ -1240,22 +1284,19 @@
             product.stock += qty;
             product.importPrice = price;
 
-            const tx = {
-                id: 'TX_' + Date.now(),
+            const importRecord = {
+                id: 'NK' + Date.now().toString().substr(-6),
                 date: document.getElementById('import-date').value,
-                type: 'IMPORT',
                 productId: product.id,
                 productName: product.name,
                 quantity: qty,
                 price: price,
                 total: qty * price,
-                costPrice: price,
-                customerInfo: document.getElementById('import-supplier').value || '',
-                paymentMethod: 'Tiền mặt',
-                note: document.getElementById('import-note').value
+                supplier: document.getElementById('import-supplier').value || '-',
+                note: document.getElementById('import-note').value || '-'
             };
 
-            transactions.unshift(tx);
+            importHistory.unshift(importRecord);
             saveData();
 
             alert('Nhập kho thành công!');
@@ -1299,6 +1340,12 @@
         }
 
         function openProductModal() {
+            document.getElementById('p-code').value = '';
+            document.getElementById('p-name').value = '';
+            document.getElementById('p-category').value = '';
+            document.getElementById('p-import-price').value = '0';
+            document.getElementById('p-export-price').value = '0';
+            document.getElementById('p-stock').value = '0';
             document.getElementById('product-modal').classList.remove('hidden');
         }
 
@@ -1310,11 +1357,11 @@
             e.preventDefault();
             const productData = {
                 id: 'P_' + Date.now(),
-                code: document.getElementById('p-code').value.trim(),
+                code: document.getElementById('p-code').value.trim().toUpperCase(),
                 name: document.getElementById('p-name').value.trim(),
-                category: document.getElementById('p-category').value,
-                importPrice: Number(document.getElementById('p-import-price').value) || 0,
-                exportPrice: Number(document.getElementById('p-export-price').value) || 0,
+                category: document.getElementById('p-category').value.trim() || 'Chưa phân loại',
+                importPrice: parseCurrencyValue(document.getElementById('p-import-price').value),
+                exportPrice: parseCurrencyValue(document.getElementById('p-export-price').value),
                 stock: Number(document.getElementById('p-stock').value) || 0,
                 unit: document.getElementById('p-unit').value || 'Bộ',
                 minStock: Number(document.getElementById('p-min-stock').value) || 2
@@ -1327,39 +1374,101 @@
             populateAllSelects();
         }
 
-        function renderHistory() {
-            const filterType = document.getElementById('history-filter-type').value;
-            const tbody = document.getElementById('history-table-body');
-            if(!tbody) return;
+        // TÁCH BIỆT BẢNG LỊCH SỬ BÁN HÀNG VÀ NHẬP HÀNG (YÊU CẦU 10)
+        function switchHistorySubTab(sub) {
+            activeHistoryTab = sub;
+            const btnExp = document.getElementById('btn-hist-export');
+            const btnImp = document.getElementById('btn-hist-import');
 
-            let filtered = transactions;
-            if (filterType !== 'ALL') filtered = filtered.filter(t => t.type === filterType);
-
-            if (filtered.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="9" class="text-center py-6 text-slate-500 text-xs">Chưa có lịch sử giao dịch.</td></tr>`;
-                return;
+            if (sub === 'EXPORT') {
+                btnExp.className = 'px-4 py-2 rounded-lg text-xs font-bold transition bg-amber-500 text-slate-900';
+                btnImp.className = 'px-4 py-2 rounded-lg text-xs font-bold transition bg-slate-700 text-slate-300';
+            } else {
+                btnImp.className = 'px-4 py-2 rounded-lg text-xs font-bold transition bg-blue-500 text-white';
+                btnExp.className = 'px-4 py-2 rounded-lg text-xs font-bold transition bg-slate-700 text-slate-300';
             }
-
-            tbody.innerHTML = filtered.map(t => `
-                <tr class="hover:bg-slate-750 transition border-b border-slate-700/50">
-                    <td class="px-4 py-3 text-xs text-slate-400 font-mono">${t.date}</td>
-                    <td class="px-4 py-3"><span class="px-2 py-0.5 rounded text-xs font-bold ${t.type === 'EXPORT' ? 'bg-amber-500/20 text-amber-400' : 'bg-blue-500/20 text-blue-400'}">${t.type === 'EXPORT' ? 'BÁN HÀNG' : 'NHẬP KHO'}</span></td>
-                    <td class="px-4 py-3 font-medium text-slate-200">${t.productName}</td>
-                    <td class="px-4 py-3 text-center font-bold">${t.quantity}</td>
-                    <td class="px-4 py-3 text-right font-mono text-xs">${formatVND(t.price)}</td>
-                    <td class="px-4 py-3 text-right font-mono font-bold ${t.type === 'EXPORT' ? 'text-amber-400' : 'text-blue-400'}">${formatVND(t.total)}</td>
-                    <td class="px-4 py-3 text-xs text-slate-300">${t.customerInfo || '-'}</td>
-                    <td class="px-4 py-3 text-xs text-slate-400">${t.paymentMethod || '-'}</td>
-                    <td class="px-4 py-3 text-xs text-slate-400">${t.note || '-'}</td>
-                </tr>
-            `).join('');
+            renderHistory();
         }
 
-        // Lưu dữ liệu vào LocalStorage và đẩy trực tiếp lên Cloud (Google Sheets)
+        function renderHistory() {
+            const thead = document.getElementById('history-table-head');
+            const tbody = document.getElementById('history-table-body');
+            if(!tbody || !thead) return;
+
+            if (activeHistoryTab === 'EXPORT') {
+                thead.innerHTML = `
+                    <tr>
+                        <th class="px-4 py-3">Mã Đơn</th>
+                        <th class="px-4 py-3">Ngày Bán</th>
+                        <th class="px-4 py-3">Biển Số Xe</th>
+                        <th class="px-4 py-3">Tên Khách</th>
+                        <th class="px-4 py-3">SĐT</th>
+                        <th class="px-4 py-3">Sản Phẩm</th>
+                        <th class="px-4 py-3 text-center">SL</th>
+                        <th class="px-4 py-3 text-right">Thành Tiền</th>
+                        <th class="px-4 py-3">Thanh Toán</th>
+                    </tr>
+                `;
+
+                if (salesHistory.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="9" class="text-center py-6 text-slate-500 text-xs">Chưa có lịch sử bán hàng.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = salesHistory.map(s => `
+                    <tr class="hover:bg-slate-750 transition border-b border-slate-700/50">
+                        <td class="px-4 py-3 text-xs font-mono text-amber-400 font-bold">#${s.id}</td>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">${formatDateVN(s.date)}</td>
+                        <td class="px-4 py-3 text-xs font-bold text-amber-500">${s.plate || '-'}</td>
+                        <td class="px-4 py-3 text-xs text-slate-200">${s.customerName || '-'}</td>
+                        <td class="px-4 py-3 text-xs font-mono text-slate-400">${s.phone || '-'}</td>
+                        <td class="px-4 py-3 font-medium text-slate-200">${s.productName}</td>
+                        <td class="px-4 py-3 text-center font-bold">${s.quantity}</td>
+                        <td class="px-4 py-3 text-right font-mono font-bold text-amber-400">${formatVND(s.total)}</td>
+                        <td class="px-4 py-3 text-xs text-slate-400">${s.paymentMethod || '-'}</td>
+                    </tr>
+                `).join('');
+
+            } else {
+                thead.innerHTML = `
+                    <tr>
+                        <th class="px-4 py-3">Mã Nhập</th>
+                        <th class="px-4 py-3">Ngày Nhập</th>
+                        <th class="px-4 py-3">Nhà Cung Cấp</th>
+                        <th class="px-4 py-3">Sản Phẩm</th>
+                        <th class="px-4 py-3 text-center">SL</th>
+                        <th class="px-4 py-3 text-right">Đơn Giá Vốn</th>
+                        <th class="px-4 py-3 text-right">Tổng Tiền</th>
+                        <th class="px-4 py-3">Ghi Chú</th>
+                    </tr>
+                `;
+
+                if (importHistory.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="8" class="text-center py-6 text-slate-500 text-xs">Chưa có lịch sử nhập hàng.</td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = importHistory.map(i => `
+                    <tr class="hover:bg-slate-750 transition border-b border-slate-700/50">
+                        <td class="px-4 py-3 text-xs font-mono text-blue-400 font-bold">#${i.id}</td>
+                        <td class="px-4 py-3 text-xs text-slate-400 font-mono">${formatDateVN(i.date)}</td>
+                        <td class="px-4 py-3 text-xs text-slate-200">${i.supplier || '-'}</td>
+                        <td class="px-4 py-3 font-medium text-slate-200">${i.productName}</td>
+                        <td class="px-4 py-3 text-center font-bold">${i.quantity}</td>
+                        <td class="px-4 py-3 text-right font-mono text-xs">${formatVND(i.price)}</td>
+                        <td class="px-4 py-3 text-right font-mono font-bold text-blue-400">${formatVND(i.total)}</td>
+                        <td class="px-4 py-3 text-xs text-slate-400">${i.note || '-'}</td>
+                    </tr>
+                `).join('');
+            }
+        }
+
         function saveData() {
             localStorage.setItem('auto_products', JSON.stringify(products));
-            localStorage.setItem('auto_transactions', JSON.stringify(transactions));
+            localStorage.setItem('auto_sales_history', JSON.stringify(salesHistory));
+            localStorage.setItem('auto_import_history', JSON.stringify(importHistory));
             localStorage.setItem('auto_system_users', JSON.stringify(systemUsers));
+            localStorage.setItem('auto_bill_seq', nextBillNumber);
             syncWithGoogleSheet();
         }
 
@@ -1372,27 +1481,30 @@
                     body: JSON.stringify({ 
                         action: 'syncAll', 
                         products: products, 
-                        transactions: transactions,
-                        users: systemUsers 
+                        sales: salesHistory,
+                        imports: importHistory,
+                        users: systemUsers,
+                        nextBillSeq: nextBillNumber
                     })
                 });
             } catch (err) {
-                console.error("Lỗi đồng bộ dữ liệu lên Google Sheets:", err);
+                console.error("Lỗi đồng bộ:", err);
             }
         }
 
         function exportToExcel() {
             const ws = XLSX.utils.json_to_sheet(products);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "KhoHang");
+            XLSX.utils.book_append_sheet(wb, ws, "Kho_Hang");
             XLSX.writeFile(wb, "Linh_Quan_Auto_Kho_Hang.xlsx");
         }
 
         function exportHistoryToExcel() {
-            const ws = XLSX.utils.json_to_sheet(transactions);
+            const data = activeHistoryTab === 'EXPORT' ? salesHistory : importHistory;
+            const ws = XLSX.utils.json_to_sheet(data);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "LichSu");
-            XLSX.writeFile(wb, "Linh_Quan_Auto_Lich_Su.xlsx");
+            XLSX.utils.book_append_sheet(wb, ws, activeHistoryTab === 'EXPORT' ? "Ban_Hang" : "Nhap_Hang");
+            XLSX.writeFile(wb, `Linh_Quan_Auto_${activeHistoryTab}.xlsx`);
         }
     </script>
 </body>
