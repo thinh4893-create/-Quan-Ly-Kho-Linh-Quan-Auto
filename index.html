@@ -38,10 +38,6 @@
                     ĐĂNG NHẬP
                 </button>
             </form>
-            <div class="text-xs text-slate-500 text-center border-t border-slate-700 pt-3 space-y-1">
-                <p>Admin: <b class="text-amber-400">admin</b> / <b class="text-slate-300">123456</b></p>
-                <p>Kế Toán: <b class="text-emerald-400">ketoan</b> / <b class="text-slate-300">123456</b></p>
-            </div>
         </div>
     </div>
 
@@ -62,7 +58,7 @@
                         <button onclick="switchTab('sell')" id="nav-sell" class="role-no-staff nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-700">
                             <i class="fa-solid fa-cart-shopping mr-1.5 text-amber-400"></i>Bán Hàng
                         </button>
-                        <button onclick="switchTab('import')" id="nav-import" class="role-admin nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-700">
+                        <button onclick="switchTab('import')" id="nav-import" class="role-admin-accountant nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-700">
                             <i class="fa-solid fa-boxes-packing mr-1.5 text-blue-400"></i>Nhập Kho
                         </button>
                         <button onclick="switchTab('inventory')" id="nav-inventory" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-700">
@@ -94,7 +90,7 @@
             <div class="md:hidden flex overflow-x-auto border-t border-slate-700 p-2 gap-1.5 bg-slate-800">
                 <button onclick="switchTab('dashboard')" class="role-admin-accountant px-3 py-1.5 rounded text-xs whitespace-nowrap bg-amber-500 text-slate-900 font-bold">Tổng Quan</button>
                 <button onclick="switchTab('sell')" class="role-no-staff px-3 py-1.5 rounded text-xs whitespace-nowrap bg-amber-500/20 text-amber-300 font-bold">Bán Hàng</button>
-                <button onclick="switchTab('import')" class="role-admin px-3 py-1.5 rounded text-xs whitespace-nowrap bg-blue-500/20 text-blue-300 font-bold">Nhập Kho</button>
+                <button onclick="switchTab('import')" class="role-admin-accountant px-3 py-1.5 rounded text-xs whitespace-nowrap bg-blue-500/20 text-blue-300 font-bold">Nhập Kho</button>
                 <button onclick="switchTab('inventory')" class="px-3 py-1.5 rounded text-xs whitespace-nowrap bg-slate-700 text-slate-200">Kho</button>
                 <button onclick="switchTab('history')" class="px-3 py-1.5 rounded text-xs whitespace-nowrap bg-slate-700 text-slate-200">Lịch Sử</button>
                 <button onclick="switchTab('users')" class="role-admin px-3 py-1.5 rounded text-xs whitespace-nowrap bg-emerald-500/20 text-emerald-300 font-bold">Nhân Sự</button>
@@ -249,7 +245,7 @@
             </section>
 
             <!-- TAB 3: NHẬP KHO -->
-            <section id="tab-import" class="role-admin hidden max-w-3xl mx-auto space-y-6">
+            <section id="tab-import" class="role-admin-accountant hidden max-w-3xl mx-auto space-y-6">
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-5">
                     <div class="flex items-center justify-between border-b border-slate-700 pb-3">
                         <h2 class="text-xl font-bold text-blue-400 flex items-center gap-2">
@@ -518,7 +514,7 @@
                 <div>
                     <label class="block text-xs font-medium text-slate-400 mb-1">Chọn Vai Trò *</label>
                     <select id="u-role" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
-                        <option value="accountant">Kế Toán (Xem doanh thu, bán hàng, kho, lịch sử)</option>
+                        <option value="accountant">Kế Toán (Xem doanh thu, bán hàng, nhập kho, kho, lịch sử)</option>
                         <option value="staff">Nhân Viên Bán Hàng (Chỉ bán hàng, xem kho)</option>
                         <option value="admin">Quản Lý / Admin (Toàn quyền)</option>
                     </select>
@@ -581,7 +577,8 @@
         let savedUsers = JSON.parse(localStorage.getItem('auto_system_users'));
         let systemUsers = savedUsers ? { ...defaultUsers, ...savedUsers } : defaultUsers;
 
-        let currentUser = JSON.parse(localStorage.getItem('auto_logged_user')) || null;
+        // Dùng sessionStorage để lưu trạng thái đăng nhập riêng biệt từng thiết bị/trình duyệt
+        let currentUser = JSON.parse(sessionStorage.getItem('auto_logged_user')) || null;
         let products = JSON.parse(localStorage.getItem('auto_products')) || [];
         let transactions = JSON.parse(localStorage.getItem('auto_transactions')) || [];
         let revenueChartInstance = null;
@@ -606,7 +603,8 @@
 
             if (systemUsers[u] && String(systemUsers[u].pass) === String(p)) {
                 currentUser = { username: u, role: systemUsers[u].role, name: systemUsers[u].name };
-                localStorage.setItem('auto_logged_user', JSON.stringify(currentUser));
+                // Lưu vào sessionStorage để độc lập thiết bị
+                sessionStorage.setItem('auto_logged_user', JSON.stringify(currentUser));
                 uInput.value = '';
                 pInput.value = '';
                 checkAuth();
@@ -616,7 +614,7 @@
         }
 
         function handleLogout() {
-            localStorage.removeItem('auto_logged_user');
+            sessionStorage.removeItem('auto_logged_user');
             currentUser = null;
             checkAuth();
         }
@@ -652,6 +650,7 @@
                 switchTab('inventory');
             } else if (currentUser.role === 'accountant') {
                 adminElements.forEach(el => el.classList.add('hidden'));
+                // Kế toán được mở các nút có class .role-admin-accountant (Tổng Quan, Nhập Kho)
                 adminAccountantElements.forEach(el => el.classList.remove('hidden'));
                 noStaffElements.forEach(el => el.classList.remove('hidden'));
                 switchTab('dashboard');
@@ -667,7 +666,8 @@
             if (currentUser.role === 'staff' && (tabId === 'dashboard' || tabId === 'import' || tabId === 'users' || tabId === 'settings' || tabId === 'sell')) {
                 tabId = 'inventory';
             }
-            if (currentUser.role === 'accountant' && (tabId === 'import' || tabId === 'users' || tabId === 'settings')) {
+            // Kế toán không được vào Quản lý nhân sự và Cài đặt
+            if (currentUser.role === 'accountant' && (tabId === 'users' || tabId === 'settings')) {
                 tabId = 'dashboard';
             }
 
