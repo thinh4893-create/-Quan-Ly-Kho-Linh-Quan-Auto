@@ -9,9 +9,18 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- Thư viện chụp ảnh Hóa đơn -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
         body { font-family: 'Inter', sans-serif; }
+        
+        @media print {
+            body * { visibility: hidden; }
+            #printable-bill, #printable-bill * { visibility: visible; }
+            #printable-bill { position: absolute; left: 0; top: 0; width: 100%; color: #000 !important; background: #fff !important; }
+            .no-print { display: none !important; }
+        }
     </style>
 </head>
 <body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
@@ -40,7 +49,7 @@
                         Nhớ tài khoản
                     </label>
                 </div>
-                <button type="submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold py-3 rounded-lg text-sm transition">
+                <button type="submit" id="btn-login-submit" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold py-3 rounded-lg text-sm transition">
                     ĐĂNG NHẬP
                 </button>
             </form>
@@ -82,6 +91,9 @@
                     </nav>
 
                     <div class="flex items-center gap-3">
+                        <button onclick="fetchCloudData()" title="Làm mới dữ liệu từ máy chủ" class="bg-slate-700 hover:bg-slate-600 text-amber-400 p-2 rounded-lg text-xs flex items-center gap-1 border border-slate-600">
+                            <i class="fa-solid fa-rotate" id="sync-icon"></i> <span class="hidden sm:inline">Tải lại dữ liệu</span>
+                        </button>
                         <div class="flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-700 text-xs">
                             <i class="fa-solid fa-user-circle text-amber-400"></i>
                             <span id="user-display-name" class="font-bold text-slate-200"></span>
@@ -92,7 +104,6 @@
                 </div>
             </div>
             
-            <!-- Mobile Navigation -->
             <div class="md:hidden flex overflow-x-auto border-t border-slate-700 p-2 gap-1.5 bg-slate-800">
                 <button onclick="switchTab('dashboard')" class="role-admin-accountant px-3 py-1.5 rounded text-xs whitespace-nowrap bg-amber-500 text-slate-900 font-bold">Tổng Quan</button>
                 <button onclick="switchTab('sell')" class="role-no-staff px-3 py-1.5 rounded text-xs whitespace-nowrap bg-amber-500/20 text-amber-300 font-bold">Bán Hàng</button>
@@ -119,7 +130,7 @@
                             <option value="month">Tháng này</option>
                             <option value="all">Tất cả thời gian</option>
                         </select>
-                        <button onclick="syncWithGoogleSheet()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-2 rounded-lg font-medium flex items-center gap-1">
+                        <button onclick="fetchCloudData()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-2 rounded-lg font-medium flex items-center gap-1">
                             <i class="fa-solid fa-rotate"></i> Đồng bộ ngay
                         </button>
                     </div>
@@ -186,7 +197,7 @@
                 </div>
             </section>
 
-            <!-- TAB 2: BÁN HÀNG (ĐA DỊCH VỤ / GIỎ HÀNG) -->
+            <!-- TAB 2: BÁN HÀNG -->
             <section id="tab-sell" class="role-no-staff hidden max-w-4xl mx-auto space-y-6">
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-5">
                     <div class="flex items-center justify-between border-b border-slate-700 pb-3">
@@ -196,7 +207,6 @@
                         <span class="text-xs bg-amber-500/10 text-amber-400 px-2.5 py-1 rounded border border-amber-500/30">Xuất Kho Nhiều Món</span>
                     </div>
 
-                    <!-- THÔNG TIN KHÁCH HÀNG & THANH TOÁN CHUNG -->
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-900 p-4 rounded-xl border border-slate-700">
                         <div>
                             <label class="block text-xs font-medium text-slate-400 mb-1">Ngày Bán / Lắp Đặt</label>
@@ -216,7 +226,6 @@
                         </div>
                     </div>
 
-                    <!-- THÊM DỊCH VỤ VÀO GIỎ -->
                     <div class="bg-slate-900 p-4 rounded-xl border border-slate-700 space-y-3">
                         <h3 class="text-sm font-bold text-slate-200"><i class="fa-solid fa-plus-circle text-amber-500 mr-1.5"></i> Thêm Dịch Vụ / Sản Phẩm Vào Đơn</h3>
                         <div class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
@@ -240,7 +249,6 @@
                         </div>
                     </div>
 
-                    <!-- BẢNG DANH SÁCH GIỎ HÀNG -->
                     <div class="bg-slate-900 rounded-xl border border-slate-700 overflow-hidden">
                         <table class="w-full text-sm text-left text-slate-300">
                             <thead class="text-xs uppercase bg-slate-800 text-slate-400 border-b border-slate-700">
@@ -270,8 +278,8 @@
                         </div>
                     </div>
 
-                    <button type="button" onclick="submitCompleteOrder()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold py-3.5 rounded-lg text-sm transition flex items-center justify-center gap-2">
-                        <i class="fa-solid fa-check-circle text-lg"></i> HOÀN TẤT ĐƠN HÀNG & TRỪ KHO
+                    <button type="button" onclick="submitCompleteOrder()" class="w-full bg-amber-500 hover:bg-amber-400 text-slate-900 font-bold py-3.5 rounded-lg text-sm transition flex items-center justify-center gap-2 shadow-lg">
+                        <i class="fa-solid fa-receipt text-lg"></i> XÁC NHẬN BÁN HÀNG & IN HÓA ĐƠN
                     </button>
                 </div>
             </section>
@@ -448,7 +456,7 @@
                                 <p class="text-xs text-slate-400">Đường dẫn Google Sheets API (Linh Quân Auto):</p>
                                 <p class="text-xs font-mono text-emerald-400 mt-1 break-all">Đã được cấu hình bảo mật cố định trong hệ thống</p>
                             </div>
-                            <button onclick="syncWithGoogleSheet()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-4 py-2 rounded-lg text-xs transition flex items-center gap-1.5">
+                            <button onclick="fetchCloudData()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-4 py-2 rounded-lg text-xs transition flex items-center gap-1.5">
                                 <i class="fa-solid fa-rotate"></i> Đồng Bộ Ngay
                             </button>
                         </div>
@@ -457,6 +465,69 @@
             </section>
 
         </main>
+    </div>
+
+    <!-- MODAL HÓA ĐƠN -->
+    <div id="bill-modal" class="fixed inset-0 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50 overflow-y-auto">
+        <div class="bg-slate-800 border border-slate-700 rounded-xl w-full max-w-lg overflow-hidden shadow-2xl my-8">
+            <div class="flex justify-between items-center px-6 py-4 border-b border-slate-700 bg-slate-850 no-print">
+                <h3 class="font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-receipt text-amber-500"></i> Hóa Đơn Khách Hàng
+                </h3>
+                <button onclick="closeBillModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <div class="p-6 bg-white text-slate-900 font-sans space-y-4" id="printable-bill">
+                <div class="text-center border-b border-slate-300 pb-3">
+                    <h2 class="text-xl font-bold tracking-wider text-slate-900">LINH QUÂN AUTO</h2>
+                    <p class="text-xs text-slate-600 mt-0.5">Chuyên Phụ Kiện - Đồ Chơi Ô Tô Cao Cấp</p>
+                    <p class="text-xs text-slate-500">Hotline/Zalo: 0906.248.494</p>
+                </div>
+
+                <div class="text-xs space-y-1">
+                    <div class="flex justify-between"><span class="text-slate-500">Mã hóa đơn:</span><span id="bill-id" class="font-bold font-mono">#LQ123456</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">Ngày dịch vụ:</span><span id="bill-date">23/10/2026</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">Khách / Biển xe:</span><span id="bill-customer" class="font-bold text-amber-700">30H-123.45</span></div>
+                    <div class="flex justify-between"><span class="text-slate-500">Thanh toán:</span><span id="bill-payment">Chuyển khoản</span></div>
+                </div>
+
+                <table class="w-full text-xs text-left border-collapse border-t border-b border-slate-300 my-2">
+                    <thead>
+                        <tr class="border-b border-slate-300 bg-slate-100">
+                            <th class="py-2 px-1">Dịch Vụ / Phụ Kiện</th>
+                            <th class="py-2 px-1 text-center">SL</th>
+                            <th class="py-2 px-1 text-right">Đơn Giá</th>
+                            <th class="py-2 px-1 text-right">Thành Tiền</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bill-table-body" class="divide-y divide-slate-200"></tbody>
+                </table>
+
+                <div class="text-xs space-y-1 text-right border-t border-slate-300 pt-2">
+                    <div class="text-sm font-bold flex justify-between">
+                        <span>TỔNG CỘNG:</span>
+                        <span id="bill-grand-total" class="text-amber-600 text-base">0 VNĐ</span>
+                    </div>
+                </div>
+
+                <div id="bill-note-box" class="bg-slate-50 p-2 rounded text-xs border border-slate-200 text-slate-600">
+                    <p><b>Ghi chú:</b> <span id="bill-note">-</span></p>
+                </div>
+
+                <div class="text-center text-[10px] text-slate-500 pt-2 border-t border-slate-200 italic">
+                    Cảm ơn Quý khách đã tin tưởng sử dụng dịch vụ tại Linh Quân Auto!
+                </div>
+            </div>
+
+            <div class="flex justify-end gap-3 p-4 bg-slate-850 border-t border-slate-700 no-print">
+                <button type="button" onclick="downloadBillImage()" class="px-3.5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs rounded-lg font-bold flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-image"></i> Tải Ảnh Bill
+                </button>
+                <button type="button" onclick="printBillDirect()" class="px-3.5 py-2 bg-amber-500 hover:bg-amber-400 text-slate-900 text-xs rounded-lg font-bold flex items-center gap-1.5 transition">
+                    <i class="fa-solid fa-print"></i> In Hóa Đơn
+                </button>
+            </div>
+        </div>
     </div>
 
     <!-- Modal Thêm Sản Phẩm -->
@@ -526,7 +597,7 @@
         </div>
     </div>
 
-    <!-- Modal Thêm Tài Khoản Nhân Sự / Kế Toán -->
+    <!-- Modal Thêm Tài Khoản -->
     <div id="user-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="bg-slate-800 border border-slate-700 rounded-xl w-full max-w-md overflow-hidden shadow-2xl">
             <div class="flex justify-between items-center px-6 py-4 border-b border-slate-700 bg-slate-850">
@@ -606,41 +677,82 @@
             'nhanvien': { pass: '123456', role: 'staff', name: 'Nhân Viên Bán Hàng' }
         };
 
-        let savedUsers = JSON.parse(localStorage.getItem('auto_system_users'));
-        let systemUsers = savedUsers ? { ...defaultUsers, ...savedUsers } : defaultUsers;
-
-        // Dùng localStorage cho toàn bộ hệ thống để đồng bộ thiết bị (Safari, Chrome, Mobile, PC)
+        let systemUsers = JSON.parse(localStorage.getItem('auto_system_users')) || defaultUsers;
         let currentUser = JSON.parse(localStorage.getItem('auto_logged_user')) || null;
         let products = JSON.parse(localStorage.getItem('auto_products')) || [];
         let transactions = JSON.parse(localStorage.getItem('auto_transactions')) || [];
         let revenueChartInstance = null;
-        
-        // Biến giỏ hàng tạm cho tab bán hàng đa dịch vụ
         let sellCart = [];
 
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             checkAuth();
             const today = new Date().toISOString().split('T')[0];
             const sellDateEl = document.getElementById('sell-date');
             const importDateEl = document.getElementById('import-date');
             if(sellDateEl) sellDateEl.value = today;
             if(importDateEl) importDateEl.value = today;
+
+            // Tải dữ liệu Đám mây đồng bộ khi mở trang
+            await fetchCloudData();
         });
 
-        function handleLogin(e) {
+        // Hàm tải toàn bộ dữ liệu mới nhất từ Google Sheets về máy
+        async function fetchCloudData() {
+            const syncIcon = document.getElementById('sync-icon');
+            if(syncIcon) syncIcon.classList.add('fa-spin');
+            try {
+                const res = await fetch(scriptUrl + '?action=getAll');
+                const data = await res.json();
+                if (data) {
+                    if (data.products) {
+                        products = data.products;
+                        localStorage.setItem('auto_products', JSON.stringify(products));
+                    }
+                    if (data.transactions) {
+                        transactions = data.transactions;
+                        localStorage.setItem('auto_transactions', JSON.stringify(transactions));
+                    }
+                    if (data.users && Object.keys(data.users).length > 0) {
+                        systemUsers = { ...defaultUsers, ...data.users };
+                        localStorage.setItem('auto_system_users', JSON.stringify(systemUsers));
+                    }
+                    
+                    // Render lại giao diện sau khi có dữ liệu đám mây mới
+                    if (currentUser) {
+                        populateAllSelects();
+                        renderInventory();
+                        renderHistory();
+                        renderDashboard();
+                        renderUsers();
+                    }
+                }
+            } catch (err) {
+                console.warn("Chế độ Offline / Không kết nối được tới Sheets:", err);
+            } finally {
+                if(syncIcon) syncIcon.classList.remove('fa-spin');
+            }
+        }
+
+        async function handleLogin(e) {
             e.preventDefault();
             const uInput = document.getElementById('login-username');
             const pInput = document.getElementById('login-password');
-            const rememberMe = document.getElementById('remember-me').checked;
+            const btnSubmit = document.getElementById('btn-login-submit');
             if (!uInput || !pInput) return;
 
             const u = uInput.value.trim().toLowerCase();
             const p = pInput.value.trim();
 
+            if (btnSubmit) btnSubmit.innerText = 'ĐANG ĐỒNG BỘ...';
+
+            // Đảm bảo lấy dữ liệu người dùng mới nhất từ Google Sheets trước khi xác thực
+            await fetchCloudData();
+
+            if (btnSubmit) btnSubmit.innerText = 'ĐĂNG NHẬP';
+
             if (systemUsers[u] && String(systemUsers[u].pass) === String(p)) {
                 currentUser = { username: u, role: systemUsers[u].role, name: systemUsers[u].name };
                 localStorage.setItem('auto_logged_user', JSON.stringify(currentUser));
-                
                 uInput.value = '';
                 pInput.value = '';
                 checkAuth();
@@ -686,7 +798,6 @@
                 switchTab('inventory');
             } else if (currentUser.role === 'accountant') {
                 adminElements.forEach(el => el.classList.add('hidden'));
-                // Kế toán có quyền xem tổng quan, nhập kho, kho hàng, lịch sử, bán hàng
                 adminAccountantElements.forEach(el => el.classList.remove('hidden'));
                 noStaffElements.forEach(el => el.classList.remove('hidden'));
                 switchTab('dashboard');
@@ -761,13 +872,9 @@
                 alert('Mật khẩu mới và xác nhận mật khẩu không trùng khớp!');
                 return;
             }
-            if (newPass.length < 6) {
-                alert('Mật khẩu mới nên có ít nhất 6 ký tự!');
-                return;
-            }
 
             systemUsers[username].pass = newPass;
-            localStorage.setItem('auto_system_users', JSON.stringify(systemUsers));
+            saveData();
             closeChangePassModal();
             alert('Đổi mật khẩu thành công!');
         }
@@ -821,8 +928,7 @@
             }
 
             systemUsers[username] = { pass: pass, role: role, name: name };
-            localStorage.setItem('auto_system_users', JSON.stringify(systemUsers));
-
+            saveData();
             closeUserModal();
             renderUsers();
             alert('Tạo tài khoản thành công!');
@@ -831,7 +937,7 @@
         function deleteUser(username) {
             if (confirm(`Bạn có chắc muốn xóa tài khoản "${username}"?`)) {
                 delete systemUsers[username];
-                localStorage.setItem('auto_system_users', JSON.stringify(systemUsers));
+                saveData();
                 renderUsers();
             }
         }
@@ -936,7 +1042,6 @@
             if (importSelect) importSelect.innerHTML = options;
         }
 
-        // --- QUẢN LÝ GIỎ HÀNG BÁN HÀNG ĐA DỊCH VỤ ---
         function onCartProductChange() {
             const productId = document.getElementById('cart-product-select').value;
             const p = products.find(item => item.id === productId);
@@ -951,16 +1056,9 @@
             const price = Number(document.getElementById('cart-price').value) || 0;
             const product = products.find(p => p.id === productId);
 
-            if (!product) {
-                alert('Vui lòng chọn sản phẩm / dịch vụ hợp lệ!');
-                return;
-            }
-            if (qty <= 0) {
-                alert('Số lượng phải lớn hơn 0!');
-                return;
-            }
+            if (!product) return alert('Vui lòng chọn sản phẩm / dịch vụ!');
+            if (qty <= 0) return alert('Số lượng phải lớn hơn 0!');
 
-            // Kiểm tra xem món này đã có trong giỏ chưa, nếu có thì cộng dồn số lượng
             const existingItem = sellCart.find(item => item.productId === productId);
             if (existingItem) {
                 existingItem.quantity += qty;
@@ -978,7 +1076,6 @@
             }
 
             renderCartTable();
-            // Reset lựa chọn
             document.getElementById('cart-quantity').value = 1;
         }
 
@@ -1033,25 +1130,21 @@
                 return;
             }
 
-            // Kiểm tra tồn kho trước khi trừ
             for (let item of sellCart) {
                 const p = products.find(prod => prod.id === item.productId);
                 if (p && p.stock < item.quantity) {
-                    if (!confirm(`Sản phẩm "${p.name}" tồn kho chỉ còn ${p.stock}, nhưng đơn bán ${item.quantity}. Vẫn tiếp tục?`)) {
-                        return;
-                    }
+                    if (!confirm(`Sản phẩm "${p.name}" tồn kho chỉ còn ${p.stock}, nhưng đơn bán ${item.quantity}. Vẫn tiếp tục?`)) return;
                 }
             }
 
-            // Trừ kho và tạo giao dịch cho từng sản phẩm trong giỏ
+            const billId = 'LQ' + Math.floor(100000 + Math.random() * 900000);
+
             sellCart.forEach(item => {
                 const product = products.find(p => p.id === item.productId);
-                if (product) {
-                    product.stock -= item.quantity;
-                }
+                if (product) product.stock -= item.quantity;
 
                 const tx = {
-                    id: 'TX_' + Date.now() + Math.random().toString(36).substr(2, 4),
+                    id: billId,
                     date: date,
                     type: 'EXPORT',
                     productId: item.productId,
@@ -1062,21 +1155,64 @@
                     costPrice: item.costPrice,
                     customerInfo: customer,
                     paymentMethod: paymentMethod,
-                    note: `[${currentUser.name}] (Đa dịch vụ) ${note}`
+                    note: `[${currentUser.name}] ${note}`
                 };
                 transactions.unshift(tx);
             });
 
             saveData();
-            alert('Đã hoàn tất đơn hàng và trừ kho thành công!');
 
-            // Reset giỏ hàng
+            openBillModal(billId, date, customer, paymentMethod, note, [...sellCart]);
+
             sellCart = [];
             document.getElementById('sell-customer').value = '';
             document.getElementById('sell-note').value = '';
             renderCartTable();
             populateAllSelects();
+        }
+
+        function openBillModal(billId, date, customer, payment, note, cartItems) {
+            document.getElementById('bill-id').innerText = '#' + billId;
+            document.getElementById('bill-date').innerText = date;
+            document.getElementById('bill-customer').innerText = customer;
+            document.getElementById('bill-payment').innerText = payment;
+            document.getElementById('bill-note').innerText = note || 'Không có';
+
+            const tbody = document.getElementById('bill-table-body');
+            let grandTotal = 0;
+            tbody.innerHTML = cartItems.map(item => {
+                grandTotal += item.total;
+                return `
+                    <tr>
+                        <td class="py-2 px-1 font-medium">${item.productName}</td>
+                        <td class="py-2 px-1 text-center">${item.quantity}</td>
+                        <td class="py-2 px-1 text-right font-mono">${formatVND(item.price)}</td>
+                        <td class="py-2 px-1 text-right font-mono font-bold">${formatVND(item.total)}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            document.getElementById('bill-grand-total').innerText = formatVND(grandTotal) + ' VNĐ';
+            document.getElementById('bill-modal').classList.remove('hidden');
+        }
+
+        function closeBillModal() {
+            document.getElementById('bill-modal').classList.add('hidden');
             switchTab(currentUser.role === 'staff' ? 'inventory' : 'dashboard');
+        }
+
+        function printBillDirect() {
+            window.print();
+        }
+
+        function downloadBillImage() {
+            const billElement = document.getElementById('printable-bill');
+            html2canvas(billElement, { scale: 2 }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `HoaDon_${document.getElementById('bill-id').innerText}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+            });
         }
 
         function onImportProductChange() {
@@ -1219,9 +1355,11 @@
             `).join('');
         }
 
+        // Lưu dữ liệu vào LocalStorage và đẩy trực tiếp lên Cloud (Google Sheets)
         function saveData() {
             localStorage.setItem('auto_products', JSON.stringify(products));
             localStorage.setItem('auto_transactions', JSON.stringify(transactions));
+            localStorage.setItem('auto_system_users', JSON.stringify(systemUsers));
             syncWithGoogleSheet();
         }
 
@@ -1231,10 +1369,15 @@
                     method: 'POST',
                     mode: 'no-cors',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'syncAll', products: products, transactions: transactions })
+                    body: JSON.stringify({ 
+                        action: 'syncAll', 
+                        products: products, 
+                        transactions: transactions,
+                        users: systemUsers 
+                    })
                 });
             } catch (err) {
-                console.error(err);
+                console.error("Lỗi đồng bộ dữ liệu lên Google Sheets:", err);
             }
         }
 
