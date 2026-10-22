@@ -39,11 +39,18 @@
             <form onsubmit="handleLogin(event)" class="space-y-4 relative z-10" autocomplete="off">
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1.5">Tên Đăng Nhập</label>
-                    <input type="text" id="login-username" required autocomplete="off" placeholder="Nhập tài khoản..." class="w-full bg-slate-950/80 border border-slate-700/70 rounded-xl p-3 text-sm text-slate-100 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition">
+                    <input type="text" id="login-username" required autocomplete="off" placeholder="Nhập tài khoản..." class="w-full bg-slate-950/80 border border-slate-700/70 rounded-xl p-3 text-sm text-slate-100 focus:border-amber-500 outline-none transition">
                 </div>
                 <div>
                     <label class="block text-xs font-semibold text-slate-300 mb-1.5">Mật Khẩu</label>
-                    <input type="password" id="login-password" required autocomplete="new-password" placeholder="••••••••" class="w-full bg-slate-950/80 border border-slate-700/70 rounded-xl p-3 text-sm text-slate-100 focus:border-amber-500 focus:ring-1 focus:ring-amber-500 outline-none transition">
+                    <input type="password" id="login-password" required autocomplete="current-password" placeholder="••••••••" class="w-full bg-slate-950/80 border border-slate-700/70 rounded-xl p-3 text-sm text-slate-100 focus:border-amber-500 outline-none transition">
+                </div>
+                <!-- YÊU CẦU 1: PHẦN LOGIN CÓ NHỚ TÀI KHOẢN (REMEMBER ME) -->
+                <div class="flex items-center justify-between text-xs text-slate-300">
+                    <label class="flex items-center gap-2 cursor-pointer">
+                        <input type="checkbox" id="remember-me" class="rounded bg-slate-950 border-slate-700 text-amber-500 focus:ring-0">
+                        Nhớ tài khoản
+                    </label>
                 </div>
                 <button type="submit" id="btn-login-submit" class="w-full bg-gradient-to-r from-amber-500 to-amber-400 hover:from-amber-400 hover:to-amber-300 text-slate-950 font-bold py-3.5 rounded-xl text-sm transition shadow-lg shadow-amber-500/20">
                     ĐĂNG NHẬP HỆ THỐNG
@@ -131,28 +138,24 @@
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                     <div class="bg-slate-900/70 border border-slate-800 p-5 rounded-2xl shadow-lg relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-amber-500/5 rounded-full blur-2xl"></div>
                         <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Doanh Thu Bán Hàng</p>
                         <h3 id="stat-revenue" class="text-2xl font-black text-amber-400 mt-2">0</h3>
                         <p class="text-xs text-slate-400 mt-1" id="stat-revenue-sub">0 đơn hàng</p>
                     </div>
 
                     <div class="bg-slate-900/70 border border-slate-800 p-5 rounded-2xl shadow-lg relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-emerald-500/5 rounded-full blur-2xl"></div>
                         <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Lợi Nhuận Ước Tính</p>
                         <h3 id="stat-profit" class="text-2xl font-black text-emerald-400 mt-2">0</h3>
                         <p class="text-xs text-slate-400 mt-1">Doanh thu - Giá vốn</p>
                     </div>
 
                     <div class="bg-slate-900/70 border border-slate-800 p-5 rounded-2xl shadow-lg relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/5 rounded-full blur-2xl"></div>
                         <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Giá Trị Tồn Kho</p>
                         <h3 id="stat-stock-value" class="text-2xl font-black text-blue-400 mt-2">0</h3>
                         <p class="text-xs text-slate-400 mt-1" id="stat-total-items">0 mặt hàng</p>
                     </div>
 
                     <div class="bg-slate-900/70 border border-slate-800 p-5 rounded-2xl shadow-lg relative overflow-hidden">
-                        <div class="absolute top-0 right-0 w-32 h-32 bg-rose-500/5 rounded-full blur-2xl"></div>
                         <p class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Cảnh Báo Hết Hàng</p>
                         <h3 id="stat-low-stock" class="text-2xl font-black text-rose-400 mt-2">0</h3>
                         <p class="text-xs text-slate-400 mt-1">Dưới định mức tối thiểu</p>
@@ -174,7 +177,7 @@
                 </div>
             </section>
 
-            <!-- TAB 2: BÁN HÀNG (Cho phép nhập dịch vụ phát sinh ngoài kho - Yêu cầu 2) -->
+            <!-- TAB 2: BÁN HÀNG -->
             <section id="tab-sell" class="role-no-staff hidden max-w-4xl mx-auto space-y-6">
                 <div class="bg-slate-900/80 border border-slate-800 p-6 rounded-3xl shadow-xl space-y-5">
                     <div class="flex items-center justify-between border-b border-slate-800 pb-4">
@@ -187,6 +190,7 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-3 bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80">
                         <div>
                             <label class="block text-[11px] font-bold text-slate-400 mb-1">Ngày Bán</label>
+                            <!-- YÊU CẦU 2: TỰ ĐỘNG THỜI GIAN THỰC -->
                             <input type="date" id="sell-date" required class="w-full bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-100 font-semibold outline-none">
                         </div>
                         <div>
@@ -211,7 +215,6 @@
                         </div>
                     </div>
 
-                    <!-- THÊM DỊCH VỤ / SẢN PHẨM HOẶC PHÁT SINH TỰ DO (YÊU CẦU 2) -->
                     <div class="bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80 space-y-3">
                         <div class="flex justify-between items-center">
                             <h3 class="text-xs font-bold text-slate-200"><i class="fa-solid fa-plus-circle text-amber-400 mr-1.5"></i> Thêm Sản Phẩm Hoặc Dịch Vụ Phát Sinh</h3>
@@ -220,7 +223,6 @@
                             </button>
                         </div>
 
-                        <!-- CHỌN TỪ KHO -->
                         <div id="warehouse-item-box" class="grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
                             <div class="md:col-span-5">
                                 <label class="block text-[11px] font-bold text-slate-400 mb-1">Chọn Sản Phẩm Từ Kho</label>
@@ -241,11 +243,10 @@
                             </div>
                         </div>
 
-                        <!-- NHẬP PHÁT SINH NGOÀI KHO (ẨN/HIỆN) -->
                         <div id="custom-item-box" class="hidden grid grid-cols-1 md:grid-cols-12 gap-3 items-end">
                             <div class="md:col-span-5">
                                 <label class="block text-[11px] font-bold text-amber-400 mb-1">Tên Dịch Vụ Phát Sinh Ngoài</label>
-                                <input type="text" id="custom-item-name" placeholder="VD: Công lắp đặt phát sinh, rửa xe..." autocomplete="off" class="w-full bg-slate-900 border border-amber-500/50 rounded-xl p-2.5 text-xs text-slate-100 outline-none">
+                                <input type="text" id="custom-item-name" placeholder="Công lắp đặt, rửa xe..." autocomplete="off" class="w-full bg-slate-900 border border-amber-500/50 rounded-xl p-2.5 text-xs text-slate-100 outline-none">
                             </div>
                             <div class="md:col-span-2">
                                 <label class="block text-[11px] font-bold text-amber-400 mb-1">Số Lượng</label>
@@ -284,7 +285,7 @@
                     <div class="flex flex-wrap items-center justify-between gap-4 bg-slate-950/60 p-4 rounded-2xl border border-slate-800/80">
                         <div>
                             <label class="block text-[11px] font-bold text-slate-400 mb-1">Ghi Chú Đơn Hàng</label>
-                            <input type="text" id="sell-note" autocomplete="off" placeholder="Bảo hành 5 năm, dán kính sườn..." class="bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-100 w-80 outline-none">
+                            <input type="text" id="sell-note" autocomplete="off" placeholder="Bảo hành 5 năm..." class="bg-slate-900 border border-slate-700 rounded-xl p-2.5 text-xs text-slate-100 w-80 outline-none">
                         </div>
                         <div class="text-right">
                             <p class="text-xs text-slate-400 font-medium">Tổng Thanh Toán:</p>
@@ -312,6 +313,7 @@
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div>
                                 <label class="block text-[11px] font-bold text-slate-400 mb-1">Ngày Nhập Kho</label>
+                                <!-- YÊU CẦU 2: TỰ ĐỘNG THỜI GIAN THỰC -->
                                 <input type="date" id="import-date" required class="w-full bg-slate-950 border border-slate-700 rounded-xl p-3 text-xs text-slate-100 font-semibold outline-none">
                             </div>
                             <div>
@@ -418,7 +420,7 @@
                 </div>
             </section>
 
-            <!-- TAB 6: NHÂN SỰ (Chỉ Admin mới có quyền thêm/xóa - Yêu cầu 3) -->
+            <!-- TAB 6: NHÂN SỰ -->
             <section id="tab-users" class="role-admin hidden max-w-4xl mx-auto space-y-6">
                 <div class="bg-slate-900/80 border border-slate-800 p-6 rounded-3xl shadow-xl space-y-6">
                     <div class="flex justify-between items-center border-b border-slate-800 pb-4">
@@ -598,7 +600,7 @@
         </div>
     </div>
 
-    <!-- Modal Thêm Tài Khoản (Chỉ Admin) -->
+    <!-- Modal Thêm Tài Khoản -->
     <div id="user-modal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md hidden flex items-center justify-center p-4 z-50">
         <div class="bg-slate-900 border border-slate-800 rounded-3xl w-full max-w-md overflow-hidden shadow-2xl">
             <div class="flex justify-between items-center px-6 py-4 border-b border-slate-800 bg-slate-900">
@@ -689,15 +691,26 @@
         let isCustomItemMode = false;
 
         document.addEventListener('DOMContentLoaded', async () => {
+            // Tải thông tin Remember Me nếu có
+            const rememberedUser = localStorage.getItem('auto_remembered_user');
+            if (rememberedUser) {
+                document.getElementById('login-username').value = rememberedUser;
+                document.getElementById('remember-me').checked = true;
+            }
+
             checkAuth();
+            setDefaultDates(); // YÊU CẦU 2: GÁN NGÀY GIỜ THỜI GIAN THỰC
+            await fetchCloudData();
+        });
+
+        // YÊU CẦU 2: TỰ ĐỘNG GÁN THỜI GIAN THỰC KHI LOAD TRANG
+        function setDefaultDates() {
             const today = new Date().toISOString().split('T')[0];
             const sellDateEl = document.getElementById('sell-date');
             const importDateEl = document.getElementById('import-date');
             if(sellDateEl) sellDateEl.value = today;
             if(importDateEl) importDateEl.value = today;
-
-            await fetchCloudData();
-        });
+        }
 
         function formatCurrencyInput(input) {
             let value = input.value.replace(/\D/g, '');
@@ -710,10 +723,8 @@
             return Number(String(str).replace(/\D/g, '')) || 0;
         }
 
-        // ĐỊNH DẠNG NGÀY HIỂN THỊ ĐÚNG CHUẨN DD/MM/YYYY (YÊU CẦU 1)
         function formatDateVN(dateString) {
             if (!dateString) return '';
-            // Nếu có chữ T (ISO string), cắt lấy phần ngày tháng năm
             if (dateString.includes('T')) {
                 dateString = dateString.split('T')[0];
             }
@@ -756,6 +767,7 @@
             e.preventDefault();
             const uInput = document.getElementById('login-username');
             const pInput = document.getElementById('login-password');
+            const rememberCheckbox = document.getElementById('remember-me');
             const btnSubmit = document.getElementById('btn-login-submit');
             if (!uInput || !pInput) return;
 
@@ -769,6 +781,14 @@
             if (systemUsers[u] && String(systemUsers[u].pass) === String(p)) {
                 currentUser = { username: u, role: systemUsers[u].role, name: systemUsers[u].name };
                 localStorage.setItem('auto_logged_user', JSON.stringify(currentUser));
+
+                // YÊU CẦU 1: XỬ LÝ NHỚ TÀI KHOẢN (REMEMBER ME)
+                if (rememberCheckbox && rememberCheckbox.checked) {
+                    localStorage.setItem('auto_remembered_user', u);
+                } else {
+                    localStorage.removeItem('auto_remembered_user');
+                }
+
                 uInput.value = ''; pInput.value = '';
                 checkAuth();
             } else {
@@ -851,7 +871,10 @@
             if (tabId === 'inventory') renderInventory();
             if (tabId === 'history') renderHistory();
             if (tabId === 'users') renderUsers();
-            if (tabId === 'sell' || tabId === 'import') populateAllSelects();
+            if (tabId === 'sell' || tabId === 'import') {
+                setDefaultDates(); // Cập nhật thời gian thực khi vào trang bán hàng/nhập kho
+                populateAllSelects();
+            }
         }
 
         function formatVND(amount) {
@@ -901,7 +924,6 @@
                         <td class="px-4 py-3">${roleBadge}</td>
                         <td class="px-4 py-3 font-mono text-slate-400">${u.pass}</td>
                         <td class="px-4 py-3 text-center">
-                            <!-- CHỈ ADMIN MỚI CÓ QUYỀN XÓA NHÂN SỰ (YÊU CẦU 3) -->
                             ${currentUser.role === 'admin' && username !== 'admin' ? 
                                 `<button onclick="deleteUser('${username}')" class="text-rose-400 hover:text-rose-300 text-xs font-bold"><i class="fa-solid fa-trash mr-1"></i> Xóa</button>` : 
                                 '<span class="text-xs text-slate-500 italic">Mặc định</span>'}
@@ -1067,7 +1089,6 @@
             if (p) document.getElementById('cart-price').value = formatVND(p.exportPrice);
         }
 
-        // HỖ TRỢ THÊM SẢN PHẨM HOẶC DỊCH VỤ PHÁT SINH NGOÀI (YÊU CẦU 2)
         function addToCart(isCustom) {
             let itemData = {};
 
@@ -1206,6 +1227,7 @@
             document.getElementById('sell-phone').value = '';
             document.getElementById('sell-note').value = '';
             renderCartTable();
+            setDefaultDates(); // Reset lại ngày về thời gian thực cho đơn tiếp theo
             populateAllSelects();
         }
 
@@ -1236,9 +1258,14 @@
             document.getElementById('bill-modal').classList.remove('hidden');
         }
 
+        // YÊU CẦU 3: SAU KHI XÁC NHẬN SẼ TỰ ĐỘNG QUAY LẠI MÀN HÌNH TỔNG QUAN
         function closeBillModal() {
             document.getElementById('bill-modal').classList.add('hidden');
-            switchTab(currentUser.role === 'staff' ? 'inventory' : 'dashboard');
+            if (currentUser.role === 'staff') {
+                switchTab('inventory');
+            } else {
+                switchTab('dashboard'); // Tự động quay về Tổng quan
+            }
         }
 
         function printBillDirect() { window.print(); }
@@ -1296,6 +1323,7 @@
             alert('Nhập kho thành công!');
             document.getElementById('import-supplier').value = '';
             document.getElementById('import-note').value = '';
+            setDefaultDates(); // Reset ngày về thực tế
             populateAllSelects();
             switchTab('inventory');
         }
