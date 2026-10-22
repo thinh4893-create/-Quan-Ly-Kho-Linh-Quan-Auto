@@ -6,11 +6,8 @@
     <title>Quản Lý Kho & Doanh Thu - Nội Thất Ô Tô</title>
 
     <script src="https://cdn.tailwindcss.com"></script>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
@@ -95,7 +92,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-xs font-medium text-slate-400 uppercase">Doanh Thu Bán Hàng</p>
-                            <h3 id="stat-revenue" class="text-2xl font-bold text-amber-400 mt-1">0 ₫</h3>
+                            <h3 id="stat-revenue" class="text-2xl font-bold text-amber-400 mt-1">0</h3>
                         </div>
                         <div class="p-2.5 bg-amber-500/10 text-amber-500 rounded-lg">
                             <i class="fa-solid fa-sack-dollar text-xl"></i>
@@ -108,7 +105,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-xs font-medium text-slate-400 uppercase">Lợi Nhuận Ước Tính</p>
-                            <h3 id="stat-profit" class="text-2xl font-bold text-emerald-400 mt-1">0 ₫</h3>
+                            <h3 id="stat-profit" class="text-2xl font-bold text-emerald-400 mt-1">0</h3>
                         </div>
                         <div class="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-lg">
                             <i class="fa-solid fa-chart-line text-xl"></i>
@@ -121,7 +118,7 @@
                     <div class="flex justify-between items-start">
                         <div>
                             <p class="text-xs font-medium text-slate-400 uppercase">Giá Trị Tồn Kho</p>
-                            <h3 id="stat-stock-value" class="text-2xl font-bold text-blue-400 mt-1">0 ₫</h3>
+                            <h3 id="stat-stock-value" class="text-2xl font-bold text-blue-400 mt-1">0</h3>
                         </div>
                         <div class="p-2.5 bg-blue-500/10 text-blue-400 rounded-lg">
                             <i class="fa-solid fa-warehouse text-xl"></i>
@@ -163,7 +160,7 @@
             </div>
         </section>
 
-        <!-- TAB 2: BÁN HÀNG & LẮP ĐẶT (TÁCH RIÊNG) -->
+        <!-- TAB 2: BÁN HÀNG & LẮP ĐẶT -->
         <section id="tab-sell" class="hidden max-w-3xl mx-auto space-y-6">
             <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-5">
                 <div class="flex items-center justify-between border-b border-slate-700 pb-3">
@@ -182,7 +179,6 @@
                         <div>
                             <label class="block text-xs font-medium text-slate-400 mb-1">Chọn Sản Phẩm / Vật Tư *</label>
                             <select id="sell-product" onchange="onSellProductChange()" required class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200 focus:border-amber-500">
-                                <!-- Options populate dynamically -->
                             </select>
                         </div>
                     </div>
@@ -193,7 +189,7 @@
                             <input type="number" id="sell-quantity" min="1" value="1" oninput="calculateSellTotal()" required class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200 focus:border-amber-500">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Đơn Giá Bán (VNĐ)</label>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Đơn Giá Bán</label>
                             <input type="number" id="sell-price" min="0" oninput="calculateSellTotal()" required class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200 focus:border-amber-500">
                         </div>
                         <div>
@@ -229,7 +225,7 @@
             </div>
         </section>
 
-        <!-- TAB 3: NHẬP KHO HÀNG HÓA (TÁCH RIÊNG) -->
+        <!-- TAB 3: NHẬP KHO HÀNG HÓA -->
         <section id="tab-import" class="hidden max-w-3xl mx-auto space-y-6">
             <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-5">
                 <div class="flex items-center justify-between border-b border-slate-700 pb-3">
@@ -248,7 +244,6 @@
                         <div>
                             <label class="block text-xs font-medium text-slate-400 mb-1">Chọn Sản Phẩm Nhập *</label>
                             <select id="import-product" onchange="onImportProductChange()" required class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200 focus:border-blue-500">
-                                <!-- Options populate dynamically -->
                             </select>
                         </div>
                     </div>
@@ -259,7 +254,7 @@
                             <input type="number" id="import-quantity" min="1" value="1" oninput="calculateImportTotal()" required class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200 focus:border-blue-500">
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">Đơn Giá Nhập / Giá Vốn (VNĐ)</label>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Đơn Giá Nhập / Giá Vốn</label>
                             <input type="number" id="import-price" min="0" oninput="calculateImportTotal()" required class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2.5 text-sm text-slate-200 focus:border-blue-500">
                         </div>
                         <div>
@@ -326,7 +321,7 @@
             </div>
         </section>
 
-        <!-- TAB 5: HISTORY -->
+        <!-- TAB 5: HISTORY (KHÔNG CÓ CỘT XÓA) -->
         <section id="tab-history" class="hidden space-y-6">
             <div class="flex flex-wrap items-center justify-between gap-4 bg-slate-800 p-4 rounded-xl border border-slate-700">
                 <div class="flex items-center gap-3">
@@ -352,9 +347,9 @@
                                 <th class="px-4 py-3 text-center">Số Lượng</th>
                                 <th class="px-4 py-3 text-right">Đơn Giá</th>
                                 <th class="px-4 py-3 text-right">Tổng Tiền</th>
-                                <th class="px-4 py-3">Biển Số Xe / NCC</th>
+                                <th class="px-4 py-3">Biển Số Xe / Khách / NCC</th>
                                 <th class="px-4 py-3">Thanh Toán</th>
-                                <th class="px-4 py-3 text-center">Xóa</th>
+                                <th class="px-4 py-3">Ghi Chú</th>
                             </tr>
                         </thead>
                         <tbody id="history-table-body" class="divide-y divide-slate-700"></tbody>
@@ -363,7 +358,7 @@
             </div>
         </section>
 
-        <!-- TAB 6: SETTINGS -->
+        <!-- TAB 6: SETTINGS (BỎ NÚT XÓA SẠCH DỮ LIỆU) -->
         <section id="tab-settings" class="hidden max-w-3xl mx-auto space-y-6">
             <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-6">
                 <h2 class="text-xl font-bold text-white flex items-center gap-2 border-b border-slate-700 pb-3">
@@ -387,13 +382,10 @@
                 </div>
 
                 <div class="border-t border-slate-700 pt-5 space-y-3">
-                    <h3 class="text-sm font-bold text-slate-200">Thao Tác Dữ Liệu</h3>
+                    <h3 class="text-sm font-bold text-slate-200">Khôi Phục Dữ Liệu Mẫu</h3>
                     <div class="flex gap-3">
                         <button onclick="loadSampleData()" class="bg-slate-700 hover:bg-slate-600 text-slate-200 px-3 py-2 rounded-lg text-xs">
-                            Nạp Dữ Liệu Mẫu
-                        </button>
-                        <button onclick="clearAllData()" class="bg-rose-900/50 hover:bg-rose-800 text-rose-200 px-3 py-2 rounded-lg text-xs border border-rose-700">
-                            Xóa Sạch Dữ Liệu
+                            Nạp Lại Dữ Liệu Mẫu
                         </button>
                     </div>
                 </div>
@@ -517,8 +509,9 @@
             if (tabId === 'sell' || tabId === 'import') populateAllSelects();
         }
 
+        // ĐỊNH DẠNG TIỀN DẠNG 1.000.000 (KHÔNG KÈM KÝ HIỆU ₫)
         function formatVND(amount) {
-            return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount || 0);
+            return (amount || 0).toLocaleString('vi-VN');
         }
 
         // --- DASHBOARD LOGIC ---
@@ -620,7 +613,6 @@
             });
         }
 
-        // --- POPULATE SELECTS ---
         function populateAllSelects() {
             const sellSelect = document.getElementById('sell-product');
             const importSelect = document.getElementById('import-product');
@@ -632,7 +624,7 @@
             if (importSelect) importSelect.innerHTML = options;
         }
 
-        // --- SELL (BÁN HÀNG) LOGIC ---
+        // --- SELL LOGIC ---
         function onSellProductChange() {
             const productId = document.getElementById('sell-product').value;
             const p = products.find(item => item.id === productId);
@@ -687,7 +679,7 @@
             switchTab('dashboard');
         }
 
-        // --- IMPORT (NHẬP KHO) LOGIC ---
+        // --- IMPORT LOGIC ---
         function onImportProductChange() {
             const productId = document.getElementById('import-product').value;
             const p = products.find(item => item.id === productId);
@@ -713,7 +705,7 @@
             if (!product) return alert('Vui lòng chọn sản phẩm!');
 
             product.stock += qty;
-            product.importPrice = price; // Cập nhật lại giá vốn mới nhất
+            product.importPrice = price;
 
             const tx = {
                 id: 'TX_' + Date.now(),
@@ -842,7 +834,7 @@
             }
         }
 
-        // --- HISTORY LOGIC ---
+        // --- HISTORY LOGIC (ĐÃ BỎ NÚT XÓA) ---
         function renderHistory() {
             const filterType = document.getElementById('history-filter-type').value;
             const tbody = document.getElementById('history-table-body');
@@ -869,19 +861,9 @@
                     <td class="px-4 py-3 text-right font-mono font-bold ${t.type === 'EXPORT' ? 'text-amber-400' : 'text-blue-400'}">${formatVND(t.total)}</td>
                     <td class="px-4 py-3 text-xs text-slate-300">${t.customerInfo || '-'}</td>
                     <td class="px-4 py-3 text-xs text-slate-400">${t.paymentMethod || '-'}</td>
-                    <td class="px-4 py-3 text-center">
-                        <button onclick="deleteTransaction('${t.id}')" class="text-rose-400 hover:text-rose-300 text-xs"><i class="fa-solid fa-trash"></i></button>
-                    </td>
+                    <td class="px-4 py-3 text-xs text-slate-400">${t.note || '-'}</td>
                 </tr>
             `).join('');
-        }
-
-        function deleteTransaction(id) {
-            if (confirm('Xóa giao dịch này khỏi lịch sử?')) {
-                transactions = transactions.filter(t => t.id !== id);
-                saveData();
-                renderHistory();
-            }
         }
 
         // --- STORAGE & SYNC ---
@@ -969,19 +951,6 @@
             renderInventory();
             renderHistory();
             populateAllSelects();
-        }
-
-        function clearAllData() {
-            if (confirm('Xóa sạch toàn bộ dữ liệu?')) {
-                localStorage.removeItem('auto_products');
-                localStorage.removeItem('auto_transactions');
-                products = [];
-                transactions = [];
-                renderDashboard();
-                renderInventory();
-                renderHistory();
-                populateAllSelects();
-            }
         }
     </script>
 </body>
