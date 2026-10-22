@@ -38,8 +38,9 @@
                     ĐĂNG NHẬP
                 </button>
             </form>
-            <div class="text-xs text-slate-500 text-center border-t border-slate-700 pt-3">
-                <p>Tài khoản Quản lý mặc định: <b class="text-amber-400">admin</b> / Mật khẩu: <b class="text-amber-400">123456</b></p>
+            <div class="text-xs text-slate-500 text-center border-t border-slate-700 pt-3 space-y-1">
+                <p>Admin: <b class="text-amber-400">admin</b> / <b class="text-slate-300">123456</b></p>
+                <p>Kế Toán: <b class="text-emerald-400">ketoan</b> / <b class="text-slate-300">123456</b></p>
             </div>
         </div>
     </div>
@@ -55,10 +56,10 @@
                     </div>
                     
                     <nav class="hidden md:flex space-x-1">
-                        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="role-admin nav-btn px-3 py-2 rounded-lg text-sm font-medium transition bg-amber-500 text-slate-900 font-semibold">
+                        <button onclick="switchTab('dashboard')" id="nav-dashboard" class="role-admin-accountant nav-btn px-3 py-2 rounded-lg text-sm font-medium transition bg-amber-500 text-slate-900 font-semibold">
                             <i class="fa-solid fa-chart-line mr-1.5"></i>Tổng Quan
                         </button>
-                        <button onclick="switchTab('sell')" id="nav-sell" class="nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-700">
+                        <button onclick="switchTab('sell')" id="nav-sell" class="role-no-staff nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-700">
                             <i class="fa-solid fa-cart-shopping mr-1.5 text-amber-400"></i>Bán Hàng
                         </button>
                         <button onclick="switchTab('import')" id="nav-import" class="role-admin nav-btn px-3 py-2 rounded-lg text-sm font-medium transition text-slate-300 hover:bg-slate-700">
@@ -82,7 +83,8 @@
                         <div class="flex items-center gap-2 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-700 text-xs">
                             <i class="fa-solid fa-user-circle text-amber-400"></i>
                             <span id="user-display-name" class="font-bold text-slate-200"></span>
-                            <button onclick="handleLogout()" class="ml-2 text-rose-400 hover:text-rose-300"><i class="fa-solid fa-right-from-bracket"></i></button>
+                            <button onclick="openChangePassModal()" title="Đổi mật khẩu" class="ml-2 text-amber-400 hover:text-amber-300"><i class="fa-solid fa-key"></i></button>
+                            <button onclick="handleLogout()" title="Đăng xuất" class="ml-1 text-rose-400 hover:text-rose-300"><i class="fa-solid fa-right-from-bracket"></i></button>
                         </div>
                     </div>
                 </div>
@@ -90,8 +92,8 @@
             
             <!-- Mobile Navigation -->
             <div class="md:hidden flex overflow-x-auto border-t border-slate-700 p-2 gap-1.5 bg-slate-800">
-                <button onclick="switchTab('dashboard')" class="role-admin px-3 py-1.5 rounded text-xs whitespace-nowrap bg-amber-500 text-slate-900 font-bold">Tổng Quan</button>
-                <button onclick="switchTab('sell')" class="px-3 py-1.5 rounded text-xs whitespace-nowrap bg-amber-500/20 text-amber-300 font-bold">Bán Hàng</button>
+                <button onclick="switchTab('dashboard')" class="role-admin-accountant px-3 py-1.5 rounded text-xs whitespace-nowrap bg-amber-500 text-slate-900 font-bold">Tổng Quan</button>
+                <button onclick="switchTab('sell')" class="role-no-staff px-3 py-1.5 rounded text-xs whitespace-nowrap bg-amber-500/20 text-amber-300 font-bold">Bán Hàng</button>
                 <button onclick="switchTab('import')" class="role-admin px-3 py-1.5 rounded text-xs whitespace-nowrap bg-blue-500/20 text-blue-300 font-bold">Nhập Kho</button>
                 <button onclick="switchTab('inventory')" class="px-3 py-1.5 rounded text-xs whitespace-nowrap bg-slate-700 text-slate-200">Kho</button>
                 <button onclick="switchTab('history')" class="px-3 py-1.5 rounded text-xs whitespace-nowrap bg-slate-700 text-slate-200">Lịch Sử</button>
@@ -103,7 +105,7 @@
         <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex-grow w-full">
 
             <!-- TAB 1: DASHBOARD -->
-            <section id="tab-dashboard" class="role-admin space-y-6">
+            <section id="tab-dashboard" class="role-admin-accountant space-y-6">
                 <div class="flex flex-wrap items-center justify-between gap-4 bg-slate-800 p-4 rounded-xl border border-slate-700">
                     <h2 class="text-lg font-bold text-white flex items-center gap-2">
                         <i class="fa-solid fa-chart-pie text-amber-500"></i> Báo Cáo Doanh Thu & Kho
@@ -183,7 +185,7 @@
             </section>
 
             <!-- TAB 2: BÁN HÀNG -->
-            <section id="tab-sell" class="hidden max-w-3xl mx-auto space-y-6">
+            <section id="tab-sell" class="role-no-staff hidden max-w-3xl mx-auto space-y-6">
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-5">
                     <div class="flex items-center justify-between border-b border-slate-700 pb-3">
                         <h2 class="text-xl font-bold text-amber-400 flex items-center gap-2">
@@ -377,15 +379,15 @@
                 </div>
             </section>
 
-            <!-- TAB 6: QUẢN LÝ NHÂN SỰ (CHỈ ADMIN) -->
+            <!-- TAB 6: QUẢN LÝ NHÂN SỰ -->
             <section id="tab-users" class="role-admin hidden max-w-4xl mx-auto space-y-6">
                 <div class="bg-slate-800 p-6 rounded-xl border border-slate-700 space-y-6">
                     <div class="flex justify-between items-center border-b border-slate-700 pb-3">
                         <h2 class="text-xl font-bold text-emerald-400 flex items-center gap-2">
-                            <i class="fa-solid fa-users-gear"></i> Quản Lý Tài Khoản Nhân Viên
+                            <i class="fa-solid fa-users-gear"></i> Quản Lý Tài Khoản Nhân Sự & Kế Toán
                         </h2>
                         <button onclick="openUserModal()" class="bg-emerald-600 hover:bg-emerald-500 text-white text-xs px-3 py-2 rounded-lg font-bold flex items-center gap-1.5 transition">
-                            <i class="fa-solid fa-user-plus"></i> Thêm Nhân Viên Mới
+                            <i class="fa-solid fa-user-plus"></i> Thêm Tài Khoản Mới
                         </button>
                     </div>
 
@@ -394,7 +396,8 @@
                             <thead class="text-xs uppercase bg-slate-900 text-slate-400 border-b border-slate-700">
                                 <tr>
                                     <th class="px-4 py-3">Tên Đăng Nhập</th>
-                                    <th class="px-4 py-3">Họ Tên Nhân Viên</th>
+                                    <th class="px-4 py-3">Họ Tên</th>
+                                    <th class="px-4 py-3">Vai Trò</th>
                                     <th class="px-4 py-3">Mật Khẩu</th>
                                     <th class="px-4 py-3 text-center">Thao Tác</th>
                                 </tr>
@@ -495,22 +498,30 @@
         </div>
     </div>
 
-    <!-- Modal Thêm Nhân Viên -->
+    <!-- Modal Thêm Tài Khoản Nhân Sự / Kế Toán -->
     <div id="user-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
         <div class="bg-slate-800 border border-slate-700 rounded-xl w-full max-w-md overflow-hidden shadow-2xl">
             <div class="flex justify-between items-center px-6 py-4 border-b border-slate-700 bg-slate-850">
-                <h3 class="font-bold text-white">Thêm Tài Khoản Nhân Viên</h3>
+                <h3 class="font-bold text-white">Thêm Tài Khoản Mới</h3>
                 <button onclick="closeUserModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
             
             <form onsubmit="saveUser(event)" class="p-6 space-y-4">
                 <div>
                     <label class="block text-xs font-medium text-slate-400 mb-1">Tên Đăng Nhập (Viết liền không dấu) *</label>
-                    <input type="text" id="u-username" required placeholder="VD: namnv" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                    <input type="text" id="u-username" required placeholder="VD: ketoan2" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
                 </div>
                 <div>
-                    <label class="block text-xs font-medium text-slate-400 mb-1">Họ Tên Nhân Viên *</label>
-                    <input type="text" id="u-name" required placeholder="VD: Nguyễn Văn Nam" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Họ Tên *</label>
+                    <input type="text" id="u-name" required placeholder="VD: Nguyễn Thị Mai" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Chọn Vai Trò *</label>
+                    <select id="u-role" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                        <option value="accountant">Kế Toán (Xem doanh thu, bán hàng, kho, lịch sử)</option>
+                        <option value="staff">Nhân Viên Bán Hàng (Chỉ bán hàng, xem kho)</option>
+                        <option value="admin">Quản Lý / Admin (Toàn quyền)</option>
+                    </select>
                 </div>
                 <div>
                     <label class="block text-xs font-medium text-slate-400 mb-1">Mật Khẩu *</label>
@@ -525,13 +536,45 @@
         </div>
     </div>
 
+    <!-- Modal Đổi Mật Khẩu Nhanh -->
+    <div id="change-pass-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4 z-50">
+        <div class="bg-slate-800 border border-slate-700 rounded-xl w-full max-w-md overflow-hidden shadow-2xl">
+            <div class="flex justify-between items-center px-6 py-4 border-b border-slate-700 bg-slate-850">
+                <h3 class="font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-key text-amber-500"></i> Đổi Mật Khẩu Nhanh
+                </h3>
+                <button onclick="closeChangePassModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+            
+            <form onsubmit="handleChangePass(event)" class="p-6 space-y-4">
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Mật Khẩu Hiện Tại *</label>
+                    <input type="password" id="cp-current-pass" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Mật Khẩu Mới *</label>
+                    <input type="password" id="cp-new-pass" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                </div>
+                <div>
+                    <label class="block text-xs font-medium text-slate-400 mb-1">Xác Nhận Mật Khẩu Mới *</label>
+                    <input type="password" id="cp-confirm-pass" required placeholder="••••••••" class="w-full bg-slate-900 border border-slate-600 rounded-lg p-2 text-sm text-slate-200">
+                </div>
+
+                <div class="flex justify-end gap-3 pt-3 border-t border-slate-700">
+                    <button type="button" onclick="closeChangePassModal()" class="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-xs rounded-lg font-medium">Hủy</button>
+                    <button type="submit" class="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-slate-900 text-xs rounded-lg font-bold">Cập Nhật Mật Khẩu</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- JavaScript Logic -->
     <script>
         const scriptUrl = "https://script.google.com/macros/s/AKfycbxSuDWEYyPzhJIoCfXHWwk78LfHVBjy5LJ2eLocv-bnFS6aX76oPRMmCB8sTZl0ZLkK/exec";
 
-        // Khởi tạo danh sách tài khoản lưu trong localStorage (Mặc định có admin và 1 nhân viên)
         let systemUsers = JSON.parse(localStorage.getItem('auto_system_users')) || {
             'admin': { pass: '123456', role: 'admin', name: 'Quản Lý (Admin)' },
+            'ketoan': { pass: '123456', role: 'accountant', name: 'Kế Toán' },
             'nhanvien': { pass: '123456', role: 'staff', name: 'Nhân Viên Bán Hàng' }
         };
 
@@ -547,7 +590,6 @@
             document.getElementById('import-date').value = today;
         });
 
-        // ĐĂNG NHẬP & PHÂN QUYỀN
         function handleLogin(e) {
             e.preventDefault();
             const u = document.getElementById('login-username').value.trim().toLowerCase();
@@ -590,18 +632,33 @@
 
         function applyPermissions() {
             const adminElements = document.querySelectorAll('.role-admin');
+            const adminAccountantElements = document.querySelectorAll('.role-admin-accountant');
+            const noStaffElements = document.querySelectorAll('.role-no-staff');
+
             if (currentUser.role === 'staff') {
                 adminElements.forEach(el => el.classList.add('hidden'));
-                switchTab('sell');
+                adminAccountantElements.forEach(el => el.classList.add('hidden'));
+                noStaffElements.forEach(el => el.classList.add('hidden'));
+                switchTab('inventory');
+            } else if (currentUser.role === 'accountant') {
+                adminElements.forEach(el => el.classList.add('hidden'));
+                adminAccountantElements.forEach(el => el.classList.remove('hidden'));
+                noStaffElements.forEach(el => el.classList.remove('hidden'));
+                switchTab('dashboard');
             } else {
                 adminElements.forEach(el => el.classList.remove('hidden'));
+                adminAccountantElements.forEach(el => el.classList.remove('hidden'));
+                noStaffElements.forEach(el => el.classList.remove('hidden'));
                 switchTab('dashboard');
             }
         }
 
         function switchTab(tabId) {
-            if (currentUser.role === 'staff' && (tabId === 'dashboard' || tabId === 'import' || tabId === 'users' || tabId === 'settings')) {
-                tabId = 'sell';
+            if (currentUser.role === 'staff' && (tabId === 'dashboard' || tabId === 'import' || tabId === 'users' || tabId === 'settings' || tabId === 'sell')) {
+                tabId = 'inventory';
+            }
+            if (currentUser.role === 'accountant' && (tabId === 'import' || tabId === 'users' || tabId === 'settings')) {
+                tabId = 'dashboard';
             }
 
             ['dashboard', 'sell', 'import', 'inventory', 'history', 'users', 'settings'].forEach(id => {
@@ -632,17 +689,60 @@
             return (amount || 0).toLocaleString('vi-VN');
         }
 
-        // --- QUẢN LÝ NHÂN SỰ (ADMIN) ---
+        // --- ĐỔI MẬT KHẨU ---
+        function openChangePassModal() {
+            document.getElementById('cp-current-pass').value = '';
+            document.getElementById('cp-new-pass').value = '';
+            document.getElementById('cp-confirm-pass').value = '';
+            document.getElementById('change-pass-modal').classList.remove('hidden');
+        }
+
+        function closeChangePassModal() {
+            document.getElementById('change-pass-modal').classList.add('hidden');
+        }
+
+        function handleChangePass(e) {
+            e.preventDefault();
+            const currentPass = document.getElementById('cp-current-pass').value.trim();
+            const newPass = document.getElementById('cp-new-pass').value.trim();
+            const confirmPass = document.getElementById('cp-confirm-pass').value.trim();
+            const username = currentUser.username;
+
+            if (systemUsers[username].pass !== currentPass) {
+                alert('Mật khẩu hiện tại không chính xác!');
+                return;
+            }
+            if (newPass !== confirmPass) {
+                alert('Mật khẩu mới và xác nhận mật khẩu không trùng khớp!');
+                return;
+            }
+            if (newPass.length < 6) {
+                alert('Mật khẩu mới nên có ít nhất 6 ký tự!');
+                return;
+            }
+
+            systemUsers[username].pass = newPass;
+            localStorage.setItem('auto_system_users', JSON.stringify(systemUsers));
+            closeChangePassModal();
+            alert('Đổi mật khẩu thành công!');
+        }
+
+        // --- QUẢN LÝ NHÂN SỰ ---
         function renderUsers() {
             const tbody = document.getElementById('users-table-body');
             const userKeys = Object.keys(systemUsers);
 
             tbody.innerHTML = userKeys.map(username => {
                 const u = systemUsers[username];
+                let roleBadge = '<span class="text-xs bg-slate-700 text-slate-300 px-2 py-0.5 rounded">Nhân viên</span>';
+                if (u.role === 'admin') roleBadge = '<span class="text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded">Quản lý</span>';
+                if (u.role === 'accountant') roleBadge = '<span class="text-xs bg-emerald-500/20 text-emerald-400 px-2 py-0.5 rounded">Kế toán</span>';
+
                 return `
                     <tr class="hover:bg-slate-750 transition border-b border-slate-700/50">
                         <td class="px-4 py-3 font-mono text-amber-400 font-bold">${username}</td>
-                        <td class="px-4 py-3 text-slate-100">${u.name} ${u.role === 'admin' ? '<span class="text-xs bg-amber-500/20 text-amber-400 px-2 py-0.5 rounded ml-2">Quản lý</span>' : ''}</td>
+                        <td class="px-4 py-3 text-slate-100">${u.name}</td>
+                        <td class="px-4 py-3">${roleBadge}</td>
                         <td class="px-4 py-3 font-mono text-slate-400">${u.pass}</td>
                         <td class="px-4 py-3 text-center">
                             ${username !== 'admin' ? `<button onclick="deleteUser('${username}')" class="text-rose-400 hover:text-rose-300 text-xs"><i class="fa-solid fa-trash"></i> Xóa</button>` : '<span class="text-xs text-slate-500 italic">Mặc định</span>'}
@@ -667,6 +767,7 @@
             e.preventDefault();
             const username = document.getElementById('u-username').value.trim().toLowerCase();
             const name = document.getElementById('u-name').value.trim();
+            const role = document.getElementById('u-role').value;
             const pass = document.getElementById('u-pass').value.trim();
 
             if (systemUsers[username]) {
@@ -674,12 +775,12 @@
                 return;
             }
 
-            systemUsers[username] = { pass: pass, role: 'staff', name: name };
+            systemUsers[username] = { pass: pass, role: role, name: name };
             localStorage.setItem('auto_system_users', JSON.stringify(systemUsers));
 
             closeUserModal();
             renderUsers();
-            alert('Đã tạo tài khoản nhân viên thành công!');
+            alert('Tạo tài khoản thành công!');
         }
 
         function deleteUser(username) {
@@ -829,7 +930,7 @@
                 costPrice: product.importPrice,
                 customerInfo: document.getElementById('sell-customer').value || '',
                 paymentMethod: document.getElementById('sell-payment').value,
-                note: `[NV: ${currentUser.name}] ` + (document.getElementById('sell-note').value || '')
+                note: `[${currentUser.name}] ` + (document.getElementById('sell-note').value || '')
             };
 
             transactions.unshift(tx);
@@ -1011,9 +1112,4 @@
         function exportHistoryToExcel() {
             const ws = XLSX.utils.json_to_sheet(transactions);
             const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, "LichSu");
-            XLSX.writeFile(wb, "Linh_Quan_Auto_Lich_Su.xlsx");
-        }
-    </script>
-</body>
-</html>
+            XLSX.utils.book_append_sheet(wb, wb, "Lich
